@@ -8,49 +8,49 @@ import (
 	"strconv"
 )
 
-type Perhitungan struct {
+type Angka struct {
 	angka1, angka2, angka3 float64
 }
 
-func (a Perhitungan) Perkalian(v1, v2 int) int {
+func Perkalian(v1, v2 int) int {
 	return v1 * v2
 }
 
-func (a Perhitungan) Pembagian(v1, v2 int) int {
+func Pembagian(v1, v2 int) int {
 	return v1 / 2
 }
 
-func (a Perhitungan) Pertambahan(v1, v2 int) int {
+func Pertambahan(v1, v2 int) int {
 	return v1 + v2
 }
 
-func (a Perhitungan) Pengurangan(v1, v2 int) int {
+func Pengurangan(v1, v2 int) int {
 	return v1 - v2
 }
 
-func (a Perhitungan) Pengakaran(v1 float64) float64 {
+func Pengakaran(v1 float64) float64 {
 	return math.Sqrt(v1)
 }
 
-func (a Perhitungan) Pangkat(v1, v2 float64) float64 {
+func Pangkat(v1, v2 float64) float64 {
 	pangkat := math.Pow(v1, v2)
 	return pangkat
 }
 
-func (a Perhitungan) LuasPersegi(v1, v2 int) int {
+func LuasPersegi(v1, v2 int) int {
 	// 2 * (panjang * lebar)
 	luas := 2 * (v1 * v2)
 	return luas
 }
 
-func (a Perhitungan) luasLingkaran(v1 float64) float64 {
+func luasLingkaran(v1 float64) float64 {
 	//  phi * ( jari jari * diameter )
 	phi := 3.14
 	luas := phi * (v1 * v1)
 	return luas
 }
 
-func (a Perhitungan) VolumeTabung(v1, v2 float64) float64 {
+func VolumeTabung(v1, v2 float64) float64 {
 	// r = luas alas
 	// t = tinggi
 	// V = π x r2 x t
@@ -59,14 +59,14 @@ func (a Perhitungan) VolumeTabung(v1, v2 float64) float64 {
 	return volume
 }
 
-func (a Perhitungan) VolumeBalok(v1, v2, v3 float64) float64 {
+func VolumeBalok(v1, v2, v3 float64) float64 {
 	// panjang * luas * tinggi
 	// V = p x l x t
 	volume := (v1 * v2 * v3)
 	return volume
 }
 
-func (a Perhitungan) VolumePrisma(v1, v2, v3 float64) float64 {
+func VolumePrisma(v1, v2, v3 float64) float64 {
 	// L = Luas Alas + Luas Tutup + Luas Selimut
 	v := v1 * v2 * v3
 	return v
@@ -104,7 +104,7 @@ func main() {
 			fmt.Println("Masukan Angka 2 : ")
 			scanner.Scan()
 			v2, _ := strconv.Atoi(scanner.Text())
-			p := Angka{v1, v2}
+
 			kali := Perkalian(v1, v2)
 			fmt.Println(kali)
 
@@ -165,8 +165,8 @@ func main() {
 			fmt.Println("Masukan Angka 2 : ")
 			scanner.Scan()
 			v2, _ := strconv.ParseFloat(scanner.Text(), 64)
-			pangkat := Pangkat(v1, v2)
-			fmt.Println(pangkat)
+			kurang := Pangkat(v1, v2)
+			fmt.Println(kurang)
 
 			break
 		case "7":
