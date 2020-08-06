@@ -85,7 +85,7 @@ func idExist(id uuid.UUID) bool {
 		if index.indParking == id {
 			value = true
 			break
-		}else {
+		} else {
 			value = false
 			break
 		}
@@ -118,7 +118,7 @@ func hitungTarif(in, end time.Time, tipe string) int {
 	harga := getHargaTarif(tipe)
 
 	switch tipe {
-	case "mobil" :
+	case "mobil":
 		tarifLanjutan = 3000
 		if counter == 1 {
 			tarif = harga
@@ -126,7 +126,7 @@ func hitungTarif(in, end time.Time, tipe string) int {
 			tarif = harga + (tarifLanjutan * counter)
 		}
 		break
-	case "motor" :
+	case "motor":
 		tarifLanjutan = 2000
 		if counter == 1 {
 			tarif = harga
@@ -160,7 +160,7 @@ func removeIdMasuk(id uuid.UUID) {
 func printMasuk() {
 	fmt.Println("DATA KENDARAAN MASUK")
 	for _, value := range masuk {
-		fmt.Println("id : ",value.indParking,"\ttanggal : ",value.tanggalMasuk.Format("2006-01-02 15:04:05"),"\tstatus : ",value.status.status)
+		fmt.Println("id : ", value.indParking, "\ttanggal : ", value.tanggalMasuk.Format("2006-01-02 15:04:05"), "\tstatus : ", value.status.status)
 		fmt.Println()
 	}
 }
@@ -239,7 +239,7 @@ func main() {
 				out.setKeluar(start, end, u2, tipe, plat, tarif)
 				removeIdMasuk(u2)
 				fmt.Println("\nSELAMAT JALAN JANGAN LUPA BERDO'A YAH...!!!\n")
-			}else {
+			} else {
 				fmt.Println("id not found")
 			}
 			break
