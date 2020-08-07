@@ -27,10 +27,7 @@ type Parking struct {
 	KELUAR Keluar
 	TARIF  int
 }
-
-var arrayKeluar []Keluar
 var arrayMasuk []Masuk
-var parking []Parking
 
 // set masuk
 func getDataMasuk() {
