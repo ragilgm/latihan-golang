@@ -8,6 +8,30 @@ import (
 	"time"
 )
 
+//==================================================================================
+// test 1
+//type Test interface {
+//	sayHello()
+//	sayHay()
+//}
+//
+//type Greeting struct {
+//	firstName, lastName string
+//}
+//
+//func (g Greeting) sayHello() (string,string){
+//	return g.firstName,g.lastName
+//}
+//func(g Greeting) sayHai() string{
+//	return g.firstName
+//}
+//
+//func main(){
+//	g := Greeting{"ragil","maulana"}
+//	fmt.Println(g.sayHai()) // ragil
+//	fmt.Println(g.sayHello()) // ragil maulana
+//}
+//==================================================================================
 
 type Parkir struct {
 	id            string

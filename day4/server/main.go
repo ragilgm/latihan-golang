@@ -16,10 +16,10 @@ type ParkirServer struct {
 
 // get time original
 var arrayMasuk []parkir.Masuk
-var arrayKeluar []parkir.Keluar
-var arrayBill []parkir.Bill
+var _ []parkir.Keluar
+var _ []parkir.Bill
 //FindId(context.Context, *Masuk) (*Validation, error)
-func (p *ParkirServer) MasukParkir(context context.Context, masuk *parkir.Masuk) (*parkir.Masuk, error) {
+func (p *ParkirServer) MasukParkir(_ context.Context, masuk *parkir.Masuk) (*parkir.Masuk, error) {
 	log.Println("===========================")
 	log.Printf("Parkir Masuk  ")
 	log.Printf("Id Parkir : %v ", masuk.GetId())
@@ -114,9 +114,7 @@ func GetHargaTarif(tipe string) int32 {
 
 func (p *ParkirServer) FindId(_ context.Context, check *parkir.Validation) (*parkir.Validation, error) {
 	checkId := false
-	log.Println("id : ",check.GetId())
 	for _ , value := range arrayMasuk{
-		fmt.Println(value.Id)
 		if(value.Id == check.Id ){
          checkId = true
 			fmt.Println("id ditemukan")
