@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package UserService;
+
+message Empty{}
+
+message User {
+  int64 ID = 1;
+  string FIRSTNAME = 2;
+  string LASTNAME = 3;
+}
+
+message Users {
+ repeated User user = 1;
+}
+
+service Add {
+  rpc InsertData(User) returns (User);
+  rpc EditData(User) returns (User);
+  rpc FindID(User) returns (User);
+  rpc FindAll(Empty) returns (Users);
+}
