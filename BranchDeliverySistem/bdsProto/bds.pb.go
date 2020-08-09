@@ -452,12 +452,17 @@ var file_bds_proto_rawDesc = []byte{
 	0x49, 0x4e, 0x41, 0x4c, 0x12, 0x14, 0x0a, 0x05, 0x53, 0x41, 0x4c, 0x44, 0x4f, 0x18, 0x07, 0x20,
 	0x01, 0x28, 0x03, 0x52, 0x05, 0x53, 0x41, 0x4c, 0x44, 0x4f, 0x12, 0x16, 0x0a, 0x06, 0x42, 0x45,
 	0x52, 0x49, 0x54, 0x41, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x42, 0x45, 0x52, 0x49,
-	0x54, 0x41, 0x32, 0x9a, 0x01, 0x0a, 0x03, 0x41, 0x64, 0x64, 0x12, 0x43, 0x0a, 0x09, 0x4c, 0x6f,
+	0x54, 0x41, 0x32, 0xea, 0x01, 0x0a, 0x03, 0x41, 0x64, 0x64, 0x12, 0x43, 0x0a, 0x09, 0x4c, 0x6f,
 	0x67, 0x69, 0x6e, 0x55, 0x73, 0x65, 0x72, 0x12, 0x1a, 0x2e, 0x42, 0x72, 0x61, 0x6e, 0x63, 0x68,
 	0x44, 0x65, 0x6c, 0x69, 0x76, 0x65, 0x72, 0x79, 0x53, 0x79, 0x73, 0x74, 0x65, 0x6d, 0x2e, 0x55,
 	0x73, 0x65, 0x72, 0x1a, 0x1a, 0x2e, 0x42, 0x72, 0x61, 0x6e, 0x63, 0x68, 0x44, 0x65, 0x6c, 0x69,
 	0x76, 0x65, 0x72, 0x79, 0x53, 0x79, 0x73, 0x74, 0x65, 0x6d, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x12,
 	0x4e, 0x0a, 0x0a, 0x53, 0x65, 0x74, 0x6f, 0x72, 0x54, 0x75, 0x6e, 0x61, 0x69, 0x12, 0x1f, 0x2e,
+	0x42, 0x72, 0x61, 0x6e, 0x63, 0x68, 0x44, 0x65, 0x6c, 0x69, 0x76, 0x65, 0x72, 0x79, 0x53, 0x79,
+	0x73, 0x74, 0x65, 0x6d, 0x2e, 0x54, 0x52, 0x41, 0x4e, 0x53, 0x41, 0x4b, 0x53, 0x49, 0x1a, 0x1f,
+	0x2e, 0x42, 0x72, 0x61, 0x6e, 0x63, 0x68, 0x44, 0x65, 0x6c, 0x69, 0x76, 0x65, 0x72, 0x79, 0x53,
+	0x79, 0x73, 0x74, 0x65, 0x6d, 0x2e, 0x54, 0x52, 0x41, 0x4e, 0x53, 0x41, 0x4b, 0x53, 0x49, 0x12,
+	0x4e, 0x0a, 0x0a, 0x54, 0x61, 0x72, 0x69, 0x6b, 0x54, 0x75, 0x6e, 0x61, 0x69, 0x12, 0x1f, 0x2e,
 	0x42, 0x72, 0x61, 0x6e, 0x63, 0x68, 0x44, 0x65, 0x6c, 0x69, 0x76, 0x65, 0x72, 0x79, 0x53, 0x79,
 	0x73, 0x74, 0x65, 0x6d, 0x2e, 0x54, 0x52, 0x41, 0x4e, 0x53, 0x41, 0x4b, 0x53, 0x49, 0x1a, 0x1f,
 	0x2e, 0x42, 0x72, 0x61, 0x6e, 0x63, 0x68, 0x44, 0x65, 0x6c, 0x69, 0x76, 0x65, 0x72, 0x79, 0x53,
@@ -488,10 +493,12 @@ var file_bds_proto_goTypes = []interface{}{
 var file_bds_proto_depIdxs = []int32{
 	1, // 0: BranchDeliverySystem.Add.LoginUser:input_type -> BranchDeliverySystem.User
 	4, // 1: BranchDeliverySystem.Add.SetorTunai:input_type -> BranchDeliverySystem.TRANSAKSI
-	1, // 2: BranchDeliverySystem.Add.LoginUser:output_type -> BranchDeliverySystem.User
-	4, // 3: BranchDeliverySystem.Add.SetorTunai:output_type -> BranchDeliverySystem.TRANSAKSI
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	4, // 2: BranchDeliverySystem.Add.TarikTunai:input_type -> BranchDeliverySystem.TRANSAKSI
+	1, // 3: BranchDeliverySystem.Add.LoginUser:output_type -> BranchDeliverySystem.User
+	4, // 4: BranchDeliverySystem.Add.SetorTunai:output_type -> BranchDeliverySystem.TRANSAKSI
+	4, // 5: BranchDeliverySystem.Add.TarikTunai:output_type -> BranchDeliverySystem.TRANSAKSI
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -598,6 +605,7 @@ const _ = grpc.SupportPackageIsVersion6
 type AddClient interface {
 	LoginUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*User, error)
 	SetorTunai(ctx context.Context, in *TRANSAKSI, opts ...grpc.CallOption) (*TRANSAKSI, error)
+	TarikTunai(ctx context.Context, in *TRANSAKSI, opts ...grpc.CallOption) (*TRANSAKSI, error)
 }
 
 type addClient struct {
@@ -626,10 +634,20 @@ func (c *addClient) SetorTunai(ctx context.Context, in *TRANSAKSI, opts ...grpc.
 	return out, nil
 }
 
+func (c *addClient) TarikTunai(ctx context.Context, in *TRANSAKSI, opts ...grpc.CallOption) (*TRANSAKSI, error) {
+	out := new(TRANSAKSI)
+	err := c.cc.Invoke(ctx, "/BranchDeliverySystem.Add/TarikTunai", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AddServer is the server API for Add service.
 type AddServer interface {
 	LoginUser(context.Context, *User) (*User, error)
 	SetorTunai(context.Context, *TRANSAKSI) (*TRANSAKSI, error)
+	TarikTunai(context.Context, *TRANSAKSI) (*TRANSAKSI, error)
 }
 
 // UnimplementedAddServer can be embedded to have forward compatible implementations.
@@ -641,6 +659,9 @@ func (*UnimplementedAddServer) LoginUser(context.Context, *User) (*User, error) 
 }
 func (*UnimplementedAddServer) SetorTunai(context.Context, *TRANSAKSI) (*TRANSAKSI, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetorTunai not implemented")
+}
+func (*UnimplementedAddServer) TarikTunai(context.Context, *TRANSAKSI) (*TRANSAKSI, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TarikTunai not implemented")
 }
 
 func RegisterAddServer(s *grpc.Server, srv AddServer) {
@@ -683,6 +704,24 @@ func _Add_SetorTunai_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Add_TarikTunai_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TRANSAKSI)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AddServer).TarikTunai(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BranchDeliverySystem.Add/TarikTunai",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AddServer).TarikTunai(ctx, req.(*TRANSAKSI))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Add_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "BranchDeliverySystem.Add",
 	HandlerType: (*AddServer)(nil),
@@ -694,6 +733,10 @@ var _Add_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetorTunai",
 			Handler:    _Add_SetorTunai_Handler,
+		},
+		{
+			MethodName: "TarikTunai",
+			Handler:    _Add_TarikTunai_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -50,4 +50,6 @@ message TRANSAKSI {
 service Add {
   rpc LoginUser (User) returns (User);
   rpc SetorTunai(TRANSAKSI) returns (TRANSAKSI);
+  rpc TarikTunai(TRANSAKSI) returns (TRANSAKSI);
+  rpc OverBooking(TRANSAKSI) returns (TRANSAKSI);
 }

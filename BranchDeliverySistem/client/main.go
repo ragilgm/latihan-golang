@@ -19,7 +19,11 @@ const (
 
 func main() {
 
-	check := SetorTunai(4444,1000,"kdfkdsmfk",1)
+	//check := SetorTunai(4444,1000,"kdfkdsmfk",1)
+	//fmt.Print(check)
+
+
+	check := TarikTunai(4444,100000,"kdfkdsmfk",1)
 	fmt.Print(check)
 	//checkLogin,cabang,role := Login("ragil", "maulana")
 	//fmt.Println(checkLogin)
@@ -30,7 +34,8 @@ func main() {
 
 
 //stor tunai client
-func SetorTunai(no_req, nominal int, berita string, idUser int) bool {
+//====================================================================================================
+func SetorTunai(no_req, nominal int, berita string, id_User int) bool {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
@@ -48,7 +53,7 @@ func SetorTunai(no_req, nominal int, berita string, idUser int) bool {
 		NO_REKENING: int64(no_req),
 		NOMINAL: int64(nominal),
 		BERITA: berita,
-		ID: int64(idUser),
+		ID: int64(id_User),
 		})
 
 	if respons != nil {
@@ -59,9 +64,43 @@ func SetorTunai(no_req, nominal int, berita string, idUser int) bool {
 	}
 
 }
+//====================================================================================================
 
 
-func Login(nama, password string) (bool, string, string) {
+//tarik tunai client
+//====================================================================================================
+func TarikTunai(no_req, nominal int, berita string, idUser int) bool {
+	// Set up a connection to the server.
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	c := BranchDeliverySystem.NewAddClient(conn)
+	// call method setor tunai
+	respons , err := c.TarikTunai(ctx,
+		&BranchDeliverySystem.TRANSAKSI{
+			NO_REKENING: int64(no_req),
+			NOMINAL: int64(nominal),
+			BERITA: berita,
+			ID: int64(idUser),
+		})
+
+	if respons != nil {
+		fmt.Println(respons)
+		return true
+	}else {
+		return false
+	}
+
+}
+//====================================================================================================
+
+func Login(id_user int, password string) (bool, string, string) {
 
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
@@ -75,7 +114,7 @@ func Login(nama, password string) (bool, string, string) {
 
 	c := BranchDeliverySystem.NewAddClient(conn)
 
-	masuk, err := c.LoginUser(ctx, &BranchDeliverySystem.User{NAMA: "ragil", PASSWORD: "ragil"})
+	masuk, err := c.LoginUser(ctx, &BranchDeliverySystem.User{ID_USER: int64(id_user), PASSWORD: password})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}

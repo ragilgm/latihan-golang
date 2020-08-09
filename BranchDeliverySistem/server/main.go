@@ -33,7 +33,7 @@ func (s *server) SetorTunai(ctx context.Context, transaksi *BranchDeliverySystem
 		log.Printf(" client request : %v,%v,%v", noreq, nominal, berita)
 
 		// call method stor tunai for check no rek exist or not
-		userDetails, err := con.SetorTunai(int(noreq), int(nominal), berita)
+		userDetails, err := con.FindNoRek(int(noreq), int(nominal), berita)
 		fmt.Println(userDetails)
 		if err != nil {
 			panic(err)
@@ -76,7 +76,7 @@ func (s *server) TarikTunai(ctx context.Context, transaksi *BranchDeliverySystem
 		log.Printf(" client request : %v,%v,%v", noreq, nominal, berita)
 
 		// call method stor tunai for check no rek exist or not
-		userDetails, err := con.SetorTunai(int(noreq), int(nominal), berita)
+		userDetails, err := con.FindNoRek(int(noreq), int(nominal), berita)
 		fmt.Println(userDetails)
 		if err != nil {
 			panic(err)
@@ -86,8 +86,8 @@ func (s *server) TarikTunai(ctx context.Context, transaksi *BranchDeliverySystem
 			userId := int(transaksi.GetID_USER())
 			trxNominal := int(transaksi.GetNOMINAL())
 
-			// method add setor tunai to db called
-			storTunai, err := con.SetorTunaiService(userId, userDetails, transaksi.GetBERITA(), trxNominal)
+			// method add tarik tunai to db called
+			storTunai, err := con.TarikTunaiService(userId, userDetails, transaksi.GetBERITA(), trxNominal)
 			if err != nil {
 				panic(err)
 			}
@@ -113,12 +113,10 @@ func (s *server) LoginUser(ctx context.Context, user *BranchDeliverySystem.User)
 		con := services.UserModels{
 			db,
 		}
-		nama := user.GetNAMA()
+		id_user := user.GetID_USER()
 		password := user.GetPASSWORD()
 
-		fmt.Println(nama)
-		fmt.Println(password)
-		users, err := con.Login(nama, password)
+		users, err := con.Login(int(id_user), password)
 		if err != nil {
 			panic(err)
 		}

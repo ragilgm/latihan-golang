@@ -2,6 +2,7 @@ package services
 
 import (
 	"database/sql"
+	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	. "github.com/ragilmaulana/restapi/tugas-golang/BranchDeliverySistem/entities"
 	"time"
@@ -11,8 +12,8 @@ type UserModels struct {
 	DB *sql.DB
 }
 
-func (um UserModels) Login(nama, password string) (User, error) {
-	rows, err := um.DB.Query("SELECT * FROM users WHERE nama LIKE ? AND PASSWORD LIKE ? ", "%"+nama+"%", "%"+password+"%")
+func (um UserModels) Login(id_user int, password string) (User, error) {
+	rows, err := um.DB.Query("SELECT * FROM users WHERE id_user=? AND PASSWORD LIKE ? ",id_user, "%"+password+"%")
 	if err != nil {
 		return User{}, err
 	} else {
@@ -37,7 +38,7 @@ func (um UserModels) Login(nama, password string) (User, error) {
 }
 
 // check nasabah exist or not
-func (um UserModels) SetorTunai(rekeningTujuan, nominal int, berita string) (NasabahDetail, error) {
+func (um UserModels) FindNoRek(rekeningTujuan, nominal int, berita string) (NasabahDetail, error) {
 	rows, err := um.DB.Query("SELECT * FROM nasabah_detail where no_req=?", rekeningTujuan)
 	if err != nil {
 		panic(err)
@@ -98,8 +99,8 @@ func (um UserModels) TarikTunaiService(userId int,nasabah NasabahDetail,berita s
 	if saldo < nominal {
 		return 0,nil
 	}else {
+		fmt.Println("called")
 		currentSaldo := nasabah.Saldo - nominal
-		//update transaksi set id_user=?,no_req=?,tanggal=?, nominal=?,saldo=?,berita=? where no_req=?
 		rows, err := um.DB.Exec(
 			"insert into transaksi (id_user, no_req,tanggal,nominal,saldo,berita)value(?,?,?,?,?,?)",
 			userId,nasabah.No_Req,tanggal,nominal,currentSaldo,berita)
