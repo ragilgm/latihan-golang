@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package BranchDeliverySystem;
+
+message Empty{}
+
+message User {
+  int64 ID_USER = 1;
+  string NAMA = 2;
+  string PASSWORD = 3;
+  string ROLE = 4;
+  string CABANG = 5;
+}
+message SETORTUNAI {
+  int64 NOREK = 1;
+  int64 NOMINAL = 2;
+  string BERITA = 3;
+}
+
+
+message NASABAH {
+  int64 CIF = 1;
+  int64 NIK = 2;
+  string NAMA = 3;
+  string TEMPAT_LAHIR = 4;
+  string TANGGAL_LAHIR = 5;
+  string ALAMAT = 6;
+  string NO_TELP = 7;
+}
+
+message NASABAH_DETAIL {
+  int64 CIF = 1;
+  int64 NO_REKENING = 2;
+  int64 SALDO = 3;
+}
+
+message TRANSAKSI {
+  int64 ID = 1;
+  int64 ID_USER = 2;
+  int64 NO_REKENING = 3;
+  string TANGGAL = 4;
+  string JENIS_TRANSAKSI = 5;
+  string NOMINAL = 6;
+  int64 SALDO = 7;
+  string BERITA = 8;
+}
+
+//message SetorTunai{
+
+//}
+//
+////message Users {
+////  repeated User user = 1;
+////}
+
+service Add {
+  rpc LoginUser (User) returns (User);
+  rpc SetorTunai(SETORTUNAI) returns (SETORTUNAI);
+}
