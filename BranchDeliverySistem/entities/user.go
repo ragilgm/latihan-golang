@@ -18,13 +18,6 @@ type Nasabah struct {
 	No_Telp string
 }
 
-type SetorTunai struct {
-	No_req int
-	Nominal int
-	Berita string
-}
-
-
 type NasabahDetail struct {
 	CIF    int
 	No_Req int

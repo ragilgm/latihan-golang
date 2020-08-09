@@ -11,12 +11,6 @@ message User {
   string ROLE = 4;
   string CABANG = 5;
 }
-message SETORTUNAI {
-  int64 NOREK = 1;
-  int64 NOMINAL = 2;
-  string BERITA = 3;
-}
-
 
 message NASABAH {
   int64 CIF = 1;
@@ -40,7 +34,7 @@ message TRANSAKSI {
   int64 NO_REKENING = 3;
   string TANGGAL = 4;
   string JENIS_TRANSAKSI = 5;
-  string NOMINAL = 6;
+  int64 NOMINAL = 6;
   int64 SALDO = 7;
   string BERITA = 8;
 }
@@ -55,5 +49,5 @@ message TRANSAKSI {
 
 service Add {
   rpc LoginUser (User) returns (User);
-  rpc SetorTunai(SETORTUNAI) returns (SETORTUNAI);
+  rpc SetorTunai(TRANSAKSI) returns (TRANSAKSI);
 }

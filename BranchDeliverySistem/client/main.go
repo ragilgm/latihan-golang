@@ -19,16 +19,18 @@ const (
 
 func main() {
 
-	//check := SetorTunai(4444,550,"kdfkdsmfk")
-	//fmt.Print(check)
-	checkLogin,cabang,role := Login("ragil", "maulana")
-	fmt.Println(checkLogin)
-	fmt.Println(cabang)
-	fmt.Println(role)
+	check := SetorTunai(4444,1000,"kdfkdsmfk",1)
+	fmt.Print(check)
+	//checkLogin,cabang,role := Login("ragil", "maulana")
+	//fmt.Println(checkLogin)
+	//fmt.Println(cabang)
+	//fmt.Println(role)
 
 }
 
-func SetorTunai(no_req, nominal int, berita string) bool {
+
+//stor tunai client
+func SetorTunai(no_req, nominal int, berita string, idUser int) bool {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
@@ -40,9 +42,13 @@ func SetorTunai(no_req, nominal int, berita string) bool {
 	defer cancel()
 
 	c := BranchDeliverySystem.NewAddClient(conn)
-
+// call method setor tunai
 	respons , err := c.SetorTunai(ctx,
-		&BranchDeliverySystem.SETORTUNAI{NOREK: int64(no_req), NOMINAL: int64(nominal), BERITA: berita,
+		&BranchDeliverySystem.TRANSAKSI{
+		NO_REKENING: int64(no_req),
+		NOMINAL: int64(nominal),
+		BERITA: berita,
+		ID: int64(idUser),
 		})
 
 	if respons != nil {

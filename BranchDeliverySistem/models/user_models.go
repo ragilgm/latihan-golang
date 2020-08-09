@@ -36,13 +36,14 @@ func (um UserModels) Login(nama, password string) (User, error) {
 	}
 }
 
+// check nasabah exist or not
 func (um UserModels) SetorTunai(rekeningTujuan, nominal int, berita string) (NasabahDetail, error) {
-	rows, err := um.DB.Query("SELECT * FROM nasabah_detail where no_req=?",rekeningTujuan)
+	rows, err := um.DB.Query("SELECT * FROM nasabah_detail where no_req=?", rekeningTujuan)
 	if err != nil {
 		panic(err)
 	} else {
 		// looping data
-		var user NasabahDetail
+		var nasabahDetail NasabahDetail
 		for rows.Next() {
 			var cif int
 			var no_req int
@@ -51,40 +52,42 @@ func (um UserModels) SetorTunai(rekeningTujuan, nominal int, berita string) (Nas
 			if err2 != nil {
 				return NasabahDetail{}, err
 			} else {
-				user = NasabahDetail{
+				nasabahDetail = NasabahDetail{
 					CIF: cif, No_Req: no_req, Saldo: saldo,
 				}
+
 			}
-		}
 
-		if user.Saldo <= nominal {
-			//	return NasabahDetail{}, err
-			//} else {
-			//	setor := SetorTunai{
-			//		No_req:  user.No_Req,
-			//		Nominal: nominal,
-			//		Berita:  berita,
-			//	}
-			//	um.AddSetorTunai(user, setor)
-			return NasabahDetail{}, nil
-		} else {
-
-			return user, nil
 		}
+		return nasabahDetail, nil
 	}
 }
-func (um UserModels) AddSetorTunai(nasabah NasabahDetail, setor SetorTunai) (int, error) {
-	tanggal := time.Now().Format("2006-01-02 15:04:05")
-	saldo := nasabah.Saldo + setor.Nominal
-	rows, err := um.DB.Exec("insert into transaksi (no_req,tanggal,nominal,saldo,berita) values (?,?,?,?,?)",
-		setor.No_req, tanggal, setor.Nominal, saldo, setor.Berita)
-	if err != nil {
-		return 0, err
-	} else {
-		idUser, _ := rows.LastInsertId()
-		return int(idUser), nil
-	}
 
+// insert setor tunai to db
+func (um UserModels) AddSetorTunai(userId int,nasabah NasabahDetail,berita string,nominal int) (int, error) {
+	tanggal := time.Now().Format("2006-01-02 15:04:05")
+	saldo := nasabah.Saldo
+
+	if saldo < nominal {
+		return 0,nil
+	}else {
+		currentSaldo := nasabah.Saldo + nominal
+		//update transaksi set id_user=?,no_req=?,tanggal=?, nominal=?,saldo=?,berita=? where no_req=?
+		rows, err := um.DB.Exec(
+			"insert into transaksi (id_user, no_req,tanggal,nominal,saldo,berita)value(?,?,?,?,?,?)",
+			userId,nasabah.No_Req,tanggal,nominal,currentSaldo,berita)
+		_,err = um.DB.Exec(
+			"update nasabah_detail set saldo = ? where no_req=?",currentSaldo,nasabah.No_Req)
+		if err != nil {
+			panic(err)
+		}
+		if err != nil {
+			return 0, err
+		} else {
+			idUser, _ := rows.RowsAffected()
+			return int(idUser), nil
+		}
+	}
 }
 
 //rows, err := um.DB.Query("SELECT * FROM nasabah_detail")

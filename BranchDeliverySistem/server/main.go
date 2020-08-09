@@ -16,7 +16,8 @@ import (
 type server struct {
 }
 
-func (s *server) SetorTunai(ctx context.Context, tunai *BranchDeliverySystem.SETORTUNAI) (*BranchDeliverySystem.SETORTUNAI, error) {
+// method setor tunai server
+func (s *server) SetorTunai(ctx context.Context, transaksi *BranchDeliverySystem.TRANSAKSI) (*BranchDeliverySystem.TRANSAKSI, error) {
 	db, err := config.GetMysqlDB()
 	if err != nil {
 		panic(err)
@@ -24,27 +25,43 @@ func (s *server) SetorTunai(ctx context.Context, tunai *BranchDeliverySystem.SET
 		con := models.UserModels{
 			db,
 		}
-		noreq := tunai.GetNOREK()
-		nominal := tunai.GetNOMINAL()
-		berita := tunai.GetBERITA()
+		noreq := transaksi.GetNO_REKENING()
+		nominal := transaksi.GetNOMINAL()
+		berita := transaksi.GetBERITA()
 
 		// respons server
-		log.Printf(" client request : %v,%v,%v",noreq,nominal,berita)
+		log.Printf(" client request : %v,%v,%v", noreq, nominal, berita)
 
-		user, err := con.SetorTunai(int(noreq), int(nominal), berita)
+		// call method stor tunai for check no rek exist or not
+		userDetails, err := con.SetorTunai(int(noreq), int(nominal), berita)
+		fmt.Println(userDetails)
 		if err != nil {
 			panic(err)
 		}
 
-		u := BranchDeliverySystem.SETORTUNAI{
-			NOREK:   int64(user.No_Req),
-			NOMINAL: int64(user.Saldo),
-			BERITA:  berita,
+		// if no req exist
+		if userDetails.No_Req != 0 {
+			userId := int(transaksi.GetID_USER())
+			trxNominal := int(transaksi.GetNOMINAL())
+
+			// method add setor tunai to db called
+			storTunai, err := con.AddSetorTunai(userId, userDetails, transaksi.GetBERITA(), trxNominal)
+			if err != nil {
+				panic(err)
+			}
+			if storTunai > 0 {
+				fmt.Println("transaksi berhasil")
+			} else {
+				fmt.Println("Transaksi gagal")
+			}
 		}
-		return &u, nil
 	}
+
+	return &BranchDeliverySystem.TRANSAKSI{}, nil
 }
 
+
+// method login server
 func (s *server) LoginUser(ctx context.Context, user *BranchDeliverySystem.User) (*BranchDeliverySystem.User, error) {
 	db, err := config.GetMysqlDB()
 
