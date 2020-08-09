@@ -7,7 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	BranchDeliverySystem "github.com/ragilmaulana/restapi/tugas-golang/BranchDeliverySistem/bdsProto"
 	"github.com/ragilmaulana/restapi/tugas-golang/BranchDeliverySistem/config"
-	"github.com/ragilmaulana/restapi/tugas-golang/BranchDeliverySistem/models"
+	"github.com/ragilmaulana/restapi/tugas-golang/BranchDeliverySistem/services"
 	"google.golang.org/grpc"
 	"log"
 	"net"
@@ -22,7 +22,7 @@ func (s *server) SetorTunai(ctx context.Context, transaksi *BranchDeliverySystem
 	if err != nil {
 		panic(err)
 	} else {
-		con := models.UserModels{
+		con := services.UserModels{
 			db,
 		}
 		noreq := transaksi.GetNO_REKENING()
@@ -38,14 +38,56 @@ func (s *server) SetorTunai(ctx context.Context, transaksi *BranchDeliverySystem
 		if err != nil {
 			panic(err)
 		}
-
 		// if no req exist
 		if userDetails.No_Req != 0 {
 			userId := int(transaksi.GetID_USER())
 			trxNominal := int(transaksi.GetNOMINAL())
 
 			// method add setor tunai to db called
-			storTunai, err := con.AddSetorTunai(userId, userDetails, transaksi.GetBERITA(), trxNominal)
+			storTunai, err := con.SetorTunaiService(userId, userDetails, transaksi.GetBERITA(), trxNominal)
+			if err != nil {
+				panic(err)
+			}
+			if storTunai > 0 {
+				fmt.Println("transaksi berhasil")
+			} else {
+				fmt.Println("Transaksi gagal")
+			}
+		}
+	}
+
+	return &BranchDeliverySystem.TRANSAKSI{}, nil
+}
+
+// method tarik tunai server
+func (s *server) TarikTunai(ctx context.Context, transaksi *BranchDeliverySystem.TRANSAKSI) (*BranchDeliverySystem.TRANSAKSI, error) {
+	db, err := config.GetMysqlDB()
+	if err != nil {
+		panic(err)
+	} else {
+		con := services.UserModels{
+			db,
+		}
+		noreq := transaksi.GetNO_REKENING()
+		nominal := transaksi.GetNOMINAL()
+		berita := transaksi.GetBERITA()
+
+		// respons server
+		log.Printf(" client request : %v,%v,%v", noreq, nominal, berita)
+
+		// call method stor tunai for check no rek exist or not
+		userDetails, err := con.SetorTunai(int(noreq), int(nominal), berita)
+		fmt.Println(userDetails)
+		if err != nil {
+			panic(err)
+		}
+		// if no req exist
+		if userDetails.No_Req != 0 {
+			userId := int(transaksi.GetID_USER())
+			trxNominal := int(transaksi.GetNOMINAL())
+
+			// method add setor tunai to db called
+			storTunai, err := con.SetorTunaiService(userId, userDetails, transaksi.GetBERITA(), trxNominal)
 			if err != nil {
 				panic(err)
 			}
@@ -68,7 +110,7 @@ func (s *server) LoginUser(ctx context.Context, user *BranchDeliverySystem.User)
 	if err != nil {
 		panic(err)
 	} else {
-		con := models.UserModels{
+		con := services.UserModels{
 			db,
 		}
 		nama := user.GetNAMA()

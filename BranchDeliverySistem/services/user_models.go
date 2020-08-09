@@ -1,4 +1,4 @@
-package models
+package services
 
 import (
 	"database/sql"
@@ -64,14 +64,41 @@ func (um UserModels) SetorTunai(rekeningTujuan, nominal int, berita string) (Nas
 }
 
 // insert setor tunai to db
-func (um UserModels) AddSetorTunai(userId int,nasabah NasabahDetail,berita string,nominal int) (int, error) {
+func (um UserModels) SetorTunaiService(userId int,nasabah NasabahDetail,berita string,nominal int) (int, error) {
 	tanggal := time.Now().Format("2006-01-02 15:04:05")
 	saldo := nasabah.Saldo
-
+	// check saldo overload
 	if saldo < nominal {
 		return 0,nil
 	}else {
 		currentSaldo := nasabah.Saldo + nominal
+		rows, err := um.DB.Exec(
+			"insert into transaksi (id_user, no_req,tanggal,nominal,saldo,berita)value(?,?,?,?,?,?)",
+			userId,nasabah.No_Req,tanggal,nominal,currentSaldo,berita)
+		_,err = um.DB.Exec(
+			"update nasabah_detail set saldo = ? where no_req=?",currentSaldo,nasabah.No_Req)
+		if err != nil {
+			panic(err)
+		}
+		if err != nil {
+			return 0, err
+		} else {
+			idUser, _ := rows.RowsAffected()
+			return int(idUser), nil
+		}
+	}
+}
+
+// insert setor tunai to db
+func (um UserModels) TarikTunaiService(userId int,nasabah NasabahDetail,berita string,nominal int) (int, error) {
+	tanggal := time.Now().Format("2006-01-02 15:04:05")
+	saldo := nasabah.Saldo
+
+	// check saldo overload
+	if saldo < nominal {
+		return 0,nil
+	}else {
+		currentSaldo := nasabah.Saldo - nominal
 		//update transaksi set id_user=?,no_req=?,tanggal=?, nominal=?,saldo=?,berita=? where no_req=?
 		rows, err := um.DB.Exec(
 			"insert into transaksi (id_user, no_req,tanggal,nominal,saldo,berita)value(?,?,?,?,?,?)",
@@ -89,6 +116,7 @@ func (um UserModels) AddSetorTunai(userId int,nasabah NasabahDetail,berita strin
 		}
 	}
 }
+
 
 //rows, err := um.DB.Query("SELECT * FROM nasabah_detail")
 
