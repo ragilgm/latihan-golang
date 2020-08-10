@@ -12,6 +12,7 @@ type UserModels struct {
 	DB *sql.DB
 }
 
+// login =============================================================================================
 func (um UserModels) Login(idUser int, password string) (User, error) {
 	rows, err := um.DB.Query("SELECT * FROM users WHERE id_user=? AND PASSWORD LIKE ? ", idUser, "%"+password+"%")
 	if err != nil {
@@ -36,6 +37,7 @@ func (um UserModels) Login(idUser int, password string) (User, error) {
 		return user, nil
 	}
 }
+// login =============================================================================================
 
 // check nasabah exist or not ========================================================================
 func (um UserModels) FindNoRek(rekeningTujuan int) (NasabahDetail, error) {
@@ -63,7 +65,6 @@ func (um UserModels) FindNoRek(rekeningTujuan int) (NasabahDetail, error) {
 		return nasabahDetail, nil
 	}
 }
-
 //===================================================================================================
 
 // service setor tunai to db ==================================================================================
@@ -84,7 +85,6 @@ func (um UserModels) SetorTunaiService(userId int, nasabah NasabahDetail, berita
 		return int(idUser), nil
 	}
 }
-
 // end of service store tunai ================================================================================
 
 // insert setor tunai to db ==================================================================================
@@ -110,7 +110,6 @@ func (um UserModels) TarikTunaiService(userId int, nasabah NasabahDetail, berita
 		}
 	}
 }
-
 // end of insert service =====================================================================================
 
 // service overbooking =======================================================================================
@@ -152,7 +151,6 @@ func (um UserModels) Overbooking(idUser int, rekeningAwal, rekeingTujuan Nasabah
 	}
 	return idUser, nil
 }
-
 // end service overbooking ===================================================================================
 
 // service cetak buku ========================================================================================
@@ -191,7 +189,6 @@ func (um UserModels) CetakBuku(no_rekening int) ([]Transaksi, error) {
 		return transaksi, nil
 	}
 }
-
 // end service cetak buku ====================================================================================
 
 // find nasabah by no req ====================================================================================
@@ -238,7 +235,6 @@ func (um UserModels) PrintNasabahInfoByRekening(nomor_rekening int) (NasabahInfo
 		return nasabahInfo, nil
 	}
 }
-
 //====================================================================================================================
 
 // find nasabah detail by cif ========================================================================================
@@ -285,14 +281,12 @@ func (um UserModels) PrintNasabahInfoByCif(cif int) (NasabahInfo, error) {
 		return nasabahInfo, nil
 	}
 }
-
 //=======================================================================================================================
 
 // find cif service ==========================================================================================
-func (um UserModels) FindNik(nik int) (Nasabah, error) {
-	rows, err := um.DB.Query("SELECT * FROM nasabah WHERE nik=?", nik)
-	fmt.Println(rows)
-	fmt.Println(nik)
+func (um UserModels) FindCIFOrNIK(seach int) (Nasabah, error) {
+	rows, err := um.DB.Query("SELECT * FROM nasabah WHERE cif=? OR nik=?",seach,seach)
+
 	if err != nil {
 		panic(err)
 	} else {
@@ -344,7 +338,6 @@ func (um UserModels) FindLastInsertNoRek() (int, error) {
 		return no_rekening, nil
 	}
 }
-
 // end find cif service ======================================================================================
 
 // Create Cif ================================================================================================
@@ -357,14 +350,13 @@ func (um UserModels) BuatCIF(nasabah Nasabah) (Nasabah, error) {
 	} else {
 		status, _ := rows.RowsAffected()
 		if status > 0 {
-			result, err := um.FindNik(nasabah.NIK)
+			result, err := um.FindCIFOrNIK(nasabah.NIK)
 			return result, err
 		} else {
 			return Nasabah{}, err
 		}
 	}
 }
-
 // ==========================================================================================================
 
 // buat rekening tabungan ===================================================================================
@@ -388,3 +380,9 @@ func (um UserModels) BuatTabungan(cif, saldo int64) (NasabahInfo, error) {
 	}
 }
 // =======================================================================================================
+
+
+
+
+
+

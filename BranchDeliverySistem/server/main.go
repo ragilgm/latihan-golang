@@ -213,16 +213,22 @@ func (s *server) CetakBuku(_ context.Context, transaksi *BranchDeliverySystem.TR
 
 // end of method cetak buku ========================================================================================================
 
-// method Find Nasabah by nik ========================================================================================================
-func (s *server) FindByNIK(_ context.Context, nasabah *BranchDeliverySystem.NASABAH) (*BranchDeliverySystem.NASABAH, error) {
+// method Find Nasabah by nik atau cif ========================================================================================================
+func (s *server) FindByNIKOrNik(_ context.Context, nasabah *BranchDeliverySystem.NASABAH) (*BranchDeliverySystem.NASABAH, error) {
 	db, err := config.GetMysqlDB()
 
 	con := services.UserModels{
 		db,
 	}
-	nik := nasabah.GetNIK()
-	fmt.Println(nik)
-	n, err := con.FindNik(int(nik))
+	var seach int
+
+	if nasabah.GetNIK() == 0 {
+		seach = int(nasabah.GetCIF())
+	}else {
+		seach = int(nasabah.GetNIK())
+	}
+
+	n, err := con.FindCIFOrNIK(int(seach))
 	if err != nil {
 		panic(err)
 	}
@@ -239,44 +245,7 @@ func (s *server) FindByNIK(_ context.Context, nasabah *BranchDeliverySystem.NASA
 	return &u, nil
 }
 
-//=============== end of find nik ===================================================================================================
-
-// method Find Nasabah by Cif ========================================================================================================
-func (s *server) FindByCIF(_ context.Context, nasabah *BranchDeliverySystem.NASABAH) (*BranchDeliverySystem.NASABAH_INFO, error) {
-	db, err := config.GetMysqlDB()
-
-	con := services.UserModels{
-		db,
-	}
-	cif := nasabah.GetCIF()
-	fmt.Println(cif)
-	n, err := con.PrintNasabahInfoByCif(int(cif))
-	if err != nil {
-		panic(err)
-	}
-
-	if n.NasabahDetail.CIF == 0 {
-		return nil, nil
-	} else {
-		return &BranchDeliverySystem.NASABAH_INFO{
-			NASABAH: &BranchDeliverySystem.NASABAH{
-				CIF:           int64(n.Nasabah.CIF),
-				NIK:           int64(n.Nasabah.NIK),
-				NAMA:          n.Nasabah.Nama,
-				TEMPAT_LAHIR:  n.Nasabah.Tempat_Lahir,
-				TANGGAL_LAHIR: n.Nasabah.Tanggal_Lahir,
-				ALAMAT:        n.Nasabah.Alamat,
-				NO_TELP:       n.Nasabah.No_Telp,
-			}, NASABAH_DETAIL: &BranchDeliverySystem.NASABAH_DETAIL{
-				CIF:         int64(n.NasabahDetail.CIF),
-				NO_REKENING: int64(n.NasabahDetail.No_Req),
-				SALDO:       int64(n.NasabahDetail.Saldo),
-			},
-		}, nil
-	}
-}
-
-//=============== end of find cif ===================================================================================================
+//=============== end of find nik or cif ===================================================================================================
 
 // Buat cif ========================================================================================================
 func (s *server) BuatCif(_ context.Context, nasabah *BranchDeliverySystem.NASABAH) (*BranchDeliverySystem.NASABAH, error) {
@@ -310,7 +279,6 @@ func (s *server) BuatCif(_ context.Context, nasabah *BranchDeliverySystem.NASABA
 		NO_TELP:       n.No_Telp,
 	}, nil
 }
-
 //=============== end of buat ===================================================================================================
 
 // Buat tabungan ========================================================================================================
@@ -343,7 +311,6 @@ func (s *server) BuatTabungan(_ context.Context, nasabah *BranchDeliverySystem.N
 		},
 	}, nil
 }
-
 //=============== end of buat ===================================================================================================
 
 // method login server ==============================================================================================================
@@ -391,5 +358,4 @@ func main() {
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
-
 }

@@ -66,14 +66,15 @@ func main() {
 	//	fmt.Println(check1)
 	//	fmt.Println("nik ",cif.NIK,"sudah di gunakan")
 	//}
-
-	result, isExist := FindByCif(1000000000)
+	result, _ := FindByNIKOrNik(3603172102970002)
 	fmt.Println(result)
-	if isExist {
-		BuatTabungan(result.NASABAH.GetCIF(), 500000)
-	}else {
-		fmt.Println("cif tidak ditemukan cif")
-	}
+	//result, isExist := FindByCif(1000000000)
+	//fmt.Println(result)
+	//if isExist {
+	//	BuatTabungan(result.NASABAH.GetCIF(), 500000)
+	//}else {
+	//	fmt.Println("cif tidak ditemukan cif")
+	//}
 }
 
 //stor tunai client
@@ -246,7 +247,7 @@ func Login(id_user int, password string) (bool, string, string) {
 //=====================================================================================================
 
 // find cif ===========================================================================================
-func FindByNik(nik int64) (*BranchDeliverySystem.NASABAH, bool) {
+func FindByNIKOrNik(seach int64) (*BranchDeliverySystem.NASABAH, bool) {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
@@ -259,8 +260,8 @@ func FindByNik(nik int64) (*BranchDeliverySystem.NASABAH, bool) {
 
 	c := BranchDeliverySystem.NewAddClient(conn)
 	// call method setor tunai
-	respons, err := c.FindByNIK(ctx, &BranchDeliverySystem.NASABAH{
-		NIK: nik,
+	respons, err := c.FindByNIKOrNik(ctx, &BranchDeliverySystem.NASABAH{
+		NIK: seach,
 	})
 	if respons.GetCIF() != 0 {
 		return respons, true
@@ -271,31 +272,6 @@ func FindByNik(nik int64) (*BranchDeliverySystem.NASABAH, bool) {
 
 //====================================================================================================
 
-// find cif ==========================================================================================
-func FindByCif(cif int64) (*BranchDeliverySystem.NASABAH_INFO, bool) {
-	// Set up a connection to the server.
-	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
-	if err != nil {
-		log.Fatalf("did not connect: %v", err)
-	}
-	defer conn.Close()
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	c := BranchDeliverySystem.NewAddClient(conn)
-	// call method setor tunai
-	respons, err := c.FindByCIF(ctx, &BranchDeliverySystem.NASABAH{
-		CIF: cif,
-	})
-	if respons != nil {
-		return respons, true
-	} else {
-		return respons, false
-	}
-}
-
-// ===================================================================================================
 
 func BuatCif(nik int64, nama, tempat_lahir, tanggal_lahir, alamat, no_telp string) (*BranchDeliverySystem.NASABAH, bool) {
 	// Set up a connection to the server.
