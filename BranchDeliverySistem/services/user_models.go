@@ -37,7 +37,7 @@ func (um UserModels) Login(idUser int, password string) (User, error) {
 	}
 }
 
-// check nasabah exist or not
+// check nasabah exist or not ========================================================================
 func (um UserModels) FindNoRek(rekeningTujuan int) (NasabahDetail, error) {
 	rows, err := um.DB.Query("SELECT * FROM nasabah_detail where no_req=?", rekeningTujuan)
 	if err != nil {
@@ -63,32 +63,29 @@ func (um UserModels) FindNoRek(rekeningTujuan int) (NasabahDetail, error) {
 		return nasabahDetail, nil
 	}
 }
+//===================================================================================================
 
-// insert setor tunai to db
+// service setor tunai to db ==================================================================================
 func (um UserModels) SetorTunaiService(userId int, nasabah NasabahDetail, berita string, nominal int) (int, error) {
 	tanggal := time.Now().Format("2006-01-02 15:04:05")
 	saldo := nasabah.Saldo
 	jenisTransaksi := "st"
-	// check saldo overload
-	if saldo < nominal {
-		return 0, nil
+	currentSaldo := saldo + nominal
+	rows, err := um.DB.Exec(
+		"insert into transaksi (id_user, no_req,tanggal,jenis_transaksi,nominal,saldo,berita)values(?,?,?,?,?,?,?)",
+		userId, nasabah.No_Req, tanggal, jenisTransaksi, nominal, currentSaldo, berita)
+	_, err = um.DB.Exec(
+		"update nasabah_detail set saldo = ? where no_req=?", currentSaldo, nasabah.No_Req)
+	if err != nil {
+		return 0, err
 	} else {
-		currentSaldo := nasabah.Saldo + nominal
-		rows, err := um.DB.Exec(
-			"insert into transaksi (id_user, no_req,tanggal,jenis_transaksi,nominal,saldo,berita)values(?,?,?,?,?,?,?)",
-			userId, nasabah.No_Req, tanggal, jenisTransaksi, nominal, currentSaldo, berita)
-		_, err = um.DB.Exec(
-			"update nasabah_detail set saldo = ? where no_req=?", currentSaldo, nasabah.No_Req)
-		if err != nil {
-			return 0, err
-		} else {
-			idUser, _ := rows.RowsAffected()
-			return int(idUser), nil
-		}
+		idUser, _ := rows.RowsAffected()
+		return int(idUser), nil
 	}
 }
+// end of service store tunai ================================================================================
 
-// insert setor tunai to db
+// insert setor tunai to db ==================================================================================
 func (um UserModels) TarikTunaiService(userId int, nasabah NasabahDetail, berita string, nominal int) (int, error) {
 	tanggal := time.Now().Format("2006-01-02 15:04:05")
 	saldo := nasabah.Saldo
@@ -111,8 +108,9 @@ func (um UserModels) TarikTunaiService(userId int, nasabah NasabahDetail, berita
 		}
 	}
 }
+// end of insert service =====================================================================================
 
-// insert Overbooking to db
+// service overbooking =======================================================================================
 func (um UserModels) Overbooking(idUser int, rekeningAwal, rekeingTujuan NasabahDetail, nominal int, berita string) (int, error) {
 	tanggal := time.Now().Format("2006-01-02 15:04:05")
 	// check saldo overload
@@ -151,7 +149,9 @@ func (um UserModels) Overbooking(idUser int, rekeningAwal, rekeingTujuan Nasabah
 	}
 	return idUser, nil
 }
+// end service overbooking ===================================================================================
 
+// service cetak buku ========================================================================================
 func (um UserModels) CetakBuku(no_rekening int) ([]Transaksi, error) {
 	rows, err := um.DB.Query("SELECT * FROM transaksi WHERE no_req=?", no_rekening)
 	if err != nil {
@@ -174,71 +174,111 @@ func (um UserModels) CetakBuku(no_rekening int) ([]Transaksi, error) {
 				trx := Transaksi{
 
 					Id_Transaksi: id_transaksi,
-					Id_User: id_user, No_Rekening: no_rek,
-					Tanggal: tanggal,
+					Id_User:      id_user, No_Rekening: no_rek,
+					Tanggal:         tanggal,
 					Jenis_Transaksi: jenis_transaksi,
-					Nominal: nominal,
-					Saldo: saldo,
-					Berita: berita,
+					Nominal:         nominal,
+					Saldo:           saldo,
+					Berita:          berita,
 				}
-				transaksi = append(transaksi,trx)
+				transaksi = append(transaksi, trx)
 			}
 		}
 		return transaksi, nil
 	}
 }
+// end service cetak buku ====================================================================================
 
-//SELECT * FROM nasabah INNER JOIN nasabah_detail ON nasabah.cif = nasabah_detail.cif WHERE no_req =
 
-//rows, err := um.DB.Query("SELECT * FROM nasabah_detail")
+// find nasabah by no req ====================================================================================
+func (um UserModels) PrintNasabahInfoByRekening(nomor_rekening int) (NasabahInfo, error){
+	rows, err := um.DB.Query("SELECT * FROM nasabah INNER JOIN nasabah_detail ON nasabah.cif = nasabah_detail.cif WHERE no_req=?", nomor_rekening)
+	if err != nil {
+		panic(err)
+	} else {
+		// looping data
+		var nasabahInfo NasabahInfo
+		for rows.Next() {
+			var cif int
+			var nik int
+			var nama string
+			var tempat_lahir string
+			var tanggal_lahir string
+			var alamat string
+			var no_telp string
+			var no_req int
+			var saldo int
+			err2 := rows.Scan(&cif, &nik, &nama, &tempat_lahir, &tanggal_lahir, &alamat, &no_telp,&cif,&no_req, &saldo)
+			if err2 != nil {
+				panic(err2)
+			} else {
+				nasabahInfo = NasabahInfo{
+					Nasabah: Nasabah{
+						CIF: cif,
+						NIK: nik,
+						Nama: nama,
+						Tempat_Lahir: tempat_lahir,
+						Alamat: alamat,
+						No_Telp: no_telp,
+					},
+					NasabahDetail: NasabahDetail{
+						CIF: cif,
+						No_Req: no_req,
+						Saldo: saldo,
+					},
+				}
 
-//err2 := rows.Scan(&cif, &no_req, &saldo)
-//if err2 != nil {
-//	return entities.NasabahDetail{},err
-//} else {
-//	fmt.Print(cif)
-//	fmt.Print(no_req)
-//	fmt.Print(saldo)
-//	users := entities.NasabahDetail{CIF: cif,No_Req: no_req,Saldo: saldo}
-//	fmt.Println(users)
-//	return users,err
-//}
+			}
 
-//if err2 != nil {
-//	return &entities.NasabahDetail{CIF: cif,No_Req: no_req,Saldo: saldo}, err
-//} else {
-//	if rows == nil {
-//		fmt.Println("no req tujuan tidak di temukan")
-//		return &entities.NasabahDetail{},err
-//	}else if saldo < nominal {
-//		fmt.Println("saldo tidak mencukupi")
-//		return &entities.NasabahDetail{},err
-//	}else {
-//		rows, err := um.DB.Exec("insert into nasabah_detail (cif,no_req,saldo) values (?,?,?) ",cif, rekeningTujuan, nominal)
-//		if err != nil {
-//			return &entities.NasabahDetail{},err
-//		}else {
-//			row, _ := rows.RowsAffected()
-//			fmt.Println("berhasil",row)
-//			return &entities.NasabahDetail{
-//				CIF: cif,
-//				No_Req: rekeningTujuan,
-//				Saldo: nominal,
-//			},nil
-//		}
-//
-//	}
-//}
-//}
+		}
+		return nasabahInfo, nil
+	}
+}
+//====================================================================================================================
 
-//
-//func (um UserModels) Update(user *entities.User) (int64, error) {
-//	rows, err := um.DB.Exec("update user set firstName = ?, lastName = ? where id=?", user.FIRSTNAME, user.LASTNAME,user.ID)
-//	if err != nil {
-//		return 0, err
-//	} else {
-//		idUser,_ := rows.RowsAffected()
-//		return idUser, nil
-//	}
-//
-//}
+
+// find nasabah detail by cif ========================================================================================
+func (um UserModels) PrintNasabahInfoByCif(cif int) (NasabahInfo, error){
+	rows, err := um.DB.Query("SELECT * FROM nasabah INNER JOIN nasabah_detail ON nasabah.cif = nasabah_detail.cif WHERE cif=?", cif)
+	if err != nil {
+		panic(err)
+	} else {
+		// looping data
+		var nasabahInfo NasabahInfo
+		for rows.Next() {
+			var cif int
+			var nik int
+			var nama string
+			var tempat_lahir string
+			var tanggal_lahir string
+			var alamat string
+			var no_telp string
+			var no_req int
+			var saldo int
+			err2 := rows.Scan(&cif, &nik, &nama, &tempat_lahir, &tanggal_lahir, &alamat, &no_telp,&cif,&no_req, &saldo)
+			if err2 != nil {
+				panic(err2)
+			} else {
+				nasabahInfo = NasabahInfo{
+					Nasabah: Nasabah{
+						CIF: cif,
+						NIK: nik,
+						Nama: nama,
+						Tempat_Lahir: tempat_lahir,
+						Alamat: alamat,
+						No_Telp: no_telp,
+					},
+					NasabahDetail: NasabahDetail{
+						CIF: cif,
+						No_Req: no_req,
+						Saldo: saldo,
+					},
+				}
+
+			}
+
+		}
+		return nasabahInfo, nil
+	}
+}
+//=======================================================================================================================

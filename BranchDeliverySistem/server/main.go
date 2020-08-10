@@ -17,8 +17,10 @@ type server struct {
 }
 
 // method setor tunai server
-func (s *server) SetorTunai(_ context.Context, transaksi *BranchDeliverySystem.TRANSAKSI) (*BranchDeliverySystem.TRANSAKSI, error) {
+func (s *server) SetorTunai(_ context.Context, transaksi *BranchDeliverySystem.TRANSAKSI) (*BranchDeliverySystem.STATUS, error) {
+	var status int
 	db, err := config.GetMysqlDB()
+
 	if err != nil {
 		panic(err)
 	} else {
@@ -48,19 +50,27 @@ func (s *server) SetorTunai(_ context.Context, transaksi *BranchDeliverySystem.T
 			if err != nil {
 				panic(err)
 			}
+			var pointerStatus *int = &status
 			if storTunai > 0 {
 				fmt.Println("transaksi berhasil")
+				*pointerStatus = 1
+				return &BranchDeliverySystem.STATUS{Status: int64(*pointerStatus)}, nil
 			} else {
-				fmt.Println("Transaksi gagal")
+				*pointerStatus = 0
+				fmt.Println("transaksi gagal")
+				return &BranchDeliverySystem.STATUS{Status: int64(*pointerStatus)}, nil
 			}
 		}
 	}
+	return &BranchDeliverySystem.STATUS{
+		Status: int64(status),
+	}, nil
 
-	return &BranchDeliverySystem.TRANSAKSI{}, nil
 }
 
-// method tarik tunai server
-func (s *server) TarikTunai(_ context.Context, transaksi *BranchDeliverySystem.TRANSAKSI) (*BranchDeliverySystem.TRANSAKSI, error) {
+// method tarik tunai server ========================================================================================================
+func (s *server) TarikTunai(_ context.Context, transaksi *BranchDeliverySystem.TRANSAKSI) (*BranchDeliverySystem.STATUS, error) {
+	var status int
 	db, err := config.GetMysqlDB()
 	if err != nil {
 		panic(err)
@@ -91,18 +101,24 @@ func (s *server) TarikTunai(_ context.Context, transaksi *BranchDeliverySystem.T
 			if err != nil {
 				panic(err)
 			}
+			var pointerStatus *int = &status
 			if storTunai > 0 {
+				*pointerStatus = 1
 				fmt.Println("transaksi berhasil")
 			} else {
+				*pointerStatus = 0
 				fmt.Println("Transaksi gagal")
 			}
 		}
 	}
 
-	return &BranchDeliverySystem.TRANSAKSI{}, nil
+	return &BranchDeliverySystem.STATUS{
+		Status: int64(status),
+	}, nil
 }
+// end of method tarik tunai server =================================================================================================
 
-// method OverBooking server
+// method OverBooking server ========================================================================================================
 func (s *server) OverBooking(_ context.Context, overbooking *BranchDeliverySystem.OVERBOOKING) (*BranchDeliverySystem.OVERBOOKING, error) {
 	db, err := config.GetMysqlDB()
 	if err != nil {
@@ -132,7 +148,7 @@ func (s *server) OverBooking(_ context.Context, overbooking *BranchDeliverySyste
 				panic(err)
 			} else {
 				fmt.Println("called")
-				over, err := con.Overbooking(int(overbooking.GetIdUser()),checkReqAwal,checkReqTujuan,int(overbooking.GetNominal()),overbooking.GetBERITA())
+				over, err := con.Overbooking(int(overbooking.GetIdUser()), checkReqAwal, checkReqTujuan, int(overbooking.GetNominal()), overbooking.GetBERITA())
 				if err != nil {
 					panic(err)
 				}
@@ -154,8 +170,9 @@ func (s *server) OverBooking(_ context.Context, overbooking *BranchDeliverySyste
 
 	}
 }
+// end of method OverBooking server =================================================================================================
 
-// method cetak buku
+// method cetak buku ================================================================================================================
 func (s *server) CetakBuku(_ context.Context, transaksi *BranchDeliverySystem.TRANSAKSI) (*BranchDeliverySystem.CETAKBUKU, error) {
 	db, err := config.GetMysqlDB()
 	var listTransaksi []*BranchDeliverySystem.TRANSAKSI
@@ -174,25 +191,55 @@ func (s *server) CetakBuku(_ context.Context, transaksi *BranchDeliverySystem.TR
 
 		for _, velue := range users {
 			trx := BranchDeliverySystem.TRANSAKSI{
-				ID: int64(velue.Id_Transaksi),
-				ID_USER: int64(velue.Id_User),
-				NO_REKENING: int64(velue.No_Rekening),
-				TANGGAL: velue.Tanggal,
-				NOMINAL: int64(velue.Nominal),
-				SALDO: int64(velue.Saldo),
+				ID:              int64(velue.Id_Transaksi),
+				ID_USER:         int64(velue.Id_User),
+				NO_REKENING:     int64(velue.No_Rekening),
+				TANGGAL:         velue.Tanggal,
+				NOMINAL:         int64(velue.Nominal),
+				SALDO:           int64(velue.Saldo),
 				JENIS_TRANSAKSI: velue.Jenis_Transaksi,
-				BERITA: velue.Berita,
+				BERITA:          velue.Berita,
 			}
-			listTransaksi = append(listTransaksi,&trx)
-			}
+			listTransaksi = append(listTransaksi, &trx)
 		}
+	}
 	return &BranchDeliverySystem.CETAKBUKU{
 		TRANSAKSI: listTransaksi,
 	}, nil
 
 }
+// end of method cetak buku ========================================================================================================
 
-// method login server
+// method Find Nasabah by cif ========================================================================================================
+func (s *server) FindCif(_ context.Context, nasabah *BranchDeliverySystem.NASABAH) (*BranchDeliverySystem.NASABAH, error) {
+	db, err := config.GetMysqlDB()
+
+	con := services.UserModels{
+		db,
+	}
+	no_cif := nasabah.GetCIF()
+
+	n, err := con.FindCif(int(no_cif))
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(n)
+	//if n != 0 {
+		u := BranchDeliverySystem.NASABAH{
+			CIF:           int64(n.CIF),
+			NIK:           int64(n.NIK),
+			NAMA:          n.Nama,
+			TEMPAT_LAHIR:  n.Tempat_Lahir,
+			TANGGAL_LAHIR: n.Tanggal_Lahir,
+			ALAMAT:        n.Alamat,
+			NO_TELP:       nasabah.NO_TELP,
+		}
+		return &u, nil
+}
+//=============== end of find cif ===================================================================================================
+
+
+// method login server ==============================================================================================================
 func (s *server) LoginUser(_ context.Context, user *BranchDeliverySystem.User) (*BranchDeliverySystem.User, error) {
 	db, err := config.GetMysqlDB()
 
@@ -220,6 +267,7 @@ func (s *server) LoginUser(_ context.Context, user *BranchDeliverySystem.User) (
 		return &u, nil
 	}
 }
+// end of login user ==============================================================================================================
 
 func main() {
 	const (

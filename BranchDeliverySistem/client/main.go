@@ -18,19 +18,35 @@ const (
 //
 
 func main() {
+
+	// fitur teller ==============================================================
 	//_,id,_ := Login(1, "maulana")
-	//check := SetorTunai(4444,1000,"kdfkdsmfk",1)
+	//check := SetorTunai(5555,1000,"kdfkdsmfk",1)
 	//fmt.Print(check)
 	//over,check := Overbooking(1,4444,5555,100000,"test")
 	//fmt.Println(over)
 	//fmt.Println(check)
-	//check := TarikTunai(4444, 100000, "kdfkdsmfk", 1)
+	//check := TarikTunai(5555, 100000, "kdfkdsmfk", 1)
 	//fmt.Print(check)
 	//checkLogin,cabang,role := Login("ragil", "maulana")
-	CetakBuku(4444)
+	//cetak,_ := CetakBuku(4444)
+	//for _ , value := range cetak.TRANSAKSI{
+    //    fmt.Println(value.ID)
+	//	fmt.Println(value.NO_REKENING)
+	//	fmt.Println(value.JENIS_TRANSAKSI)
+	//	fmt.Println(value.TANGGAL)
+	//	fmt.Println(value.NOMINAL)
+	//	fmt.Println(value.SALDO)
+	//	fmt.Println(value.BERITA)
+	//}
 	//fmt.Println(checkLogin)
 	//fmt.Println(cabang)
 	//fmt.Println(role)
+//========== end fitur teller ================================
+
+// fitur cs =================================================
+cif, _ := FindCif(6666)
+fmt.Println(cif)
 
 }
 
@@ -57,7 +73,7 @@ func SetorTunai(no_req, nominal int, berita string, id_User int) bool {
 			ID:          int64(id_User),
 		})
 
-	if respons != nil {
+	if respons.Status != 0 {
 		fmt.Println(respons)
 		return true
 	} else {
@@ -65,9 +81,7 @@ func SetorTunai(no_req, nominal int, berita string, id_User int) bool {
 	}
 
 }
-
 //====================================================================================================
-
 //tarik tunai client
 //====================================================================================================
 func TarikTunai(no_req, nominal int, berita string, idUser int) bool {
@@ -91,7 +105,7 @@ func TarikTunai(no_req, nominal int, berita string, idUser int) bool {
 			ID:          int64(idUser),
 		})
 
-	if respons != nil {
+	if respons.Status != 0 {
 		fmt.Println(respons)
 		return true
 	} else {
@@ -99,9 +113,7 @@ func TarikTunai(no_req, nominal int, berita string, idUser int) bool {
 	}
 
 }
-
 //====================================================================================================
-
 //Cetak Buku client
 //====================================================================================================
 func CetakBuku(no_rekening int64) (*BranchDeliverySystem.CETAKBUKU, bool) {
@@ -126,7 +138,6 @@ func CetakBuku(no_rekening int64) (*BranchDeliverySystem.CETAKBUKU, bool) {
 	}
 }
 //====================================================================================================
-
 //overbooking client
 //====================================================================================================
 func Overbooking(id_User int, norekAsal, noRekTujuan, nominal int64, berita string) (*BranchDeliverySystem.OVERBOOKING, bool) {
@@ -163,14 +174,10 @@ func Overbooking(id_User int, norekAsal, noRekTujuan, nominal int64, berita stri
 		return respons,false
 	}
 }
-
 //====================================================================================================
 
-// login
-//=====================================================================================================
-
+// login ==============================================================================================
 func Login(id_user int, password string) (bool, string, string) {
-
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
@@ -206,3 +213,28 @@ func Login(id_user int, password string) (bool, string, string) {
 	}
 }
 //=====================================================================================================
+
+// find cif ===========================================================================================
+func FindCif(cif int64) (*BranchDeliverySystem.NASABAH, bool) {
+	// Set up a connection to the server.
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	c := BranchDeliverySystem.NewAddClient(conn)
+	// call method setor tunai
+	respons, err := c.FindCif(ctx,&BranchDeliverySystem.NASABAH{
+		CIF: cif,
+	})
+	if respons.CIF != 0 {
+		return respons,true
+	} else {
+		return respons,false
+	}
+}
+//====================================================================================================

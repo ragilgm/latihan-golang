@@ -12,8 +12,8 @@ type Nasabah struct {
 	CIF     int
 	NIK     int
 	Nama    string
-	TTL     string
-	TL      string
+	Tempat_Lahir     string
+	Tanggal_Lahir string
 	Alamat  string
 	No_Telp string
 }
@@ -22,6 +22,11 @@ type NasabahDetail struct {
 	CIF    int
 	No_Req int
 	Saldo  int
+}
+
+type NasabahInfo struct {
+	Nasabah Nasabah
+	NasabahDetail NasabahDetail
 }
 
 type Transaksi struct {

@@ -38,6 +38,11 @@ message TRANSAKSI {
   string BERITA = 8;
 }
 
+message NASABAH_INFO {
+  NASABAH NASABAH = 1;
+  NASABAH_DETAIL NASABAH_DETAIL = 2;
+}
+
 message OVERBOOKING {
   int64 IdUser = 1;
  NASABAH_DETAIL NasabahDetail1 = 2;
@@ -46,8 +51,14 @@ message OVERBOOKING {
  string BERITA = 5;
 }
 
+
+
 message CETAKBUKU {
   repeated TRANSAKSI TRANSAKSI= 1;
+}
+
+message STATUS {
+  int64 status = 1;
 }
 
 message EMPTY {
@@ -55,8 +66,9 @@ message EMPTY {
 
 service Add {
   rpc LoginUser (User) returns (User);
-  rpc SetorTunai(TRANSAKSI) returns (TRANSAKSI);
-  rpc TarikTunai(TRANSAKSI) returns (TRANSAKSI);
+  rpc SetorTunai(TRANSAKSI) returns (STATUS);
+  rpc TarikTunai(TRANSAKSI) returns (STATUS);
   rpc OverBooking(OVERBOOKING) returns (OVERBOOKING);
   rpc CetakBuku(TRANSAKSI) returns (CETAKBUKU);
+  rpc FindCif(NASABAH) returns (NASABAH);
 }
