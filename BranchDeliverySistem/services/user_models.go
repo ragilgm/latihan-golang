@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	BranchDeliverySystem "github.com/ragilmaulana/restapi/tugas-golang/BranchDeliverySistem/bdsProto"
 	. "github.com/ragilmaulana/restapi/tugas-golang/BranchDeliverySistem/entities"
 	"time"
 )
@@ -37,6 +38,7 @@ func (um UserModels) Login(idUser int, password string) (User, error) {
 		return user, nil
 	}
 }
+
 // login =============================================================================================
 
 // check nasabah exist or not ========================================================================
@@ -65,6 +67,7 @@ func (um UserModels) FindNoRek(rekeningTujuan int) (NasabahDetail, error) {
 		return nasabahDetail, nil
 	}
 }
+
 //===================================================================================================
 
 // service setor tunai to db ==================================================================================
@@ -85,6 +88,7 @@ func (um UserModels) SetorTunaiService(userId int, nasabah NasabahDetail, berita
 		return int(idUser), nil
 	}
 }
+
 // end of service store tunai ================================================================================
 
 // insert setor tunai to db ==================================================================================
@@ -110,6 +114,7 @@ func (um UserModels) TarikTunaiService(userId int, nasabah NasabahDetail, berita
 		}
 	}
 }
+
 // end of insert service =====================================================================================
 
 // service overbooking =======================================================================================
@@ -151,6 +156,7 @@ func (um UserModels) Overbooking(idUser int, rekeningAwal, rekeingTujuan Nasabah
 	}
 	return idUser, nil
 }
+
 // end service overbooking ===================================================================================
 
 // service cetak buku ========================================================================================
@@ -189,6 +195,7 @@ func (um UserModels) CetakBuku(no_rekening int) ([]Transaksi, error) {
 		return transaksi, nil
 	}
 }
+
 // end service cetak buku ====================================================================================
 
 // find nasabah by no req ====================================================================================
@@ -235,6 +242,7 @@ func (um UserModels) PrintNasabahInfoByRekening(nomor_rekening int) (NasabahInfo
 		return nasabahInfo, nil
 	}
 }
+
 //====================================================================================================================
 
 // find nasabah detail by cif ========================================================================================
@@ -281,11 +289,12 @@ func (um UserModels) PrintNasabahInfoByCif(cif int) (NasabahInfo, error) {
 		return nasabahInfo, nil
 	}
 }
+
 //=======================================================================================================================
 
 // find cif service ==========================================================================================
 func (um UserModels) FindCIFOrNIK(seach int) (Nasabah, error) {
-	rows, err := um.DB.Query("SELECT * FROM nasabah WHERE cif=? OR nik=?",seach,seach)
+	rows, err := um.DB.Query("SELECT * FROM nasabah WHERE cif=? OR nik=?", seach, seach)
 
 	if err != nil {
 		panic(err)
@@ -338,6 +347,7 @@ func (um UserModels) FindLastInsertNoRek() (int, error) {
 		return no_rekening, nil
 	}
 }
+
 // end find cif service ======================================================================================
 
 // Create Cif ================================================================================================
@@ -357,16 +367,17 @@ func (um UserModels) BuatCIF(nasabah Nasabah) (Nasabah, error) {
 		}
 	}
 }
+
 // ==========================================================================================================
 
 // buat rekening tabungan ===================================================================================
 func (um UserModels) BuatTabungan(cif, saldo int64) (NasabahInfo, error) {
 	last_no_rekening, _ := um.FindLastInsertNoRek()
-		last_no_rekening += 1
+	last_no_rekening += 1
 
 	fmt.Println(last_no_rekening)
 	rows, err := um.DB.Exec("insert into nasabah_detail (cif,no_rekening,saldo) values (?,?,?)",
-		cif,last_no_rekening, saldo)
+		cif, last_no_rekening, saldo)
 	if err != nil {
 		panic(err)
 	}
@@ -374,15 +385,49 @@ func (um UserModels) BuatTabungan(cif, saldo int64) (NasabahInfo, error) {
 	if status > 0 {
 		// call method print nasabah by cif
 		result, _ := um.PrintNasabahInfoByCif(int(cif))
-		return result,nil
-	}else{
-		return NasabahInfo{},nil
+		return result, nil
+	} else {
+		return NasabahInfo{}, nil
 	}
 }
+
 // =======================================================================================================
 
+// management crud nasabah ====================================================================================
+func (um UserModels) UpdateNasabah(nasabah Nasabah) (*BranchDeliverySystem.NASABAH_INFO, error) {
+	rows, err := um.DB.Exec("update nasabah set nik = ?, nama = ?, tempat_lahir = ?, tanggal_lahir=?,alamat=?,no_telepon=? where cif =? or nik=?",
+		nasabah.NIK, nasabah.Nama, nasabah.Tempat_Lahir, nasabah.Tanggal_Lahir, nasabah.Alamat, nasabah.No_Telp, nasabah.CIF, nasabah.NIK)
+	fmt.Println(nasabah)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("called")
+var Respons *BranchDeliverySystem.NASABAH_INFO
+	idUser, _ := rows.RowsAffected()
+	fmt.Println(idUser)
+	if idUser > 0 {
 
-
-
-
-
+		result, err := um.PrintNasabahInfoByCif(nasabah.CIF)
+		if err != nil {
+			panic(err)
+		}
+		Respons =  &BranchDeliverySystem.NASABAH_INFO{
+			NASABAH: &BranchDeliverySystem.NASABAH{
+				CIF: int64(result.Nasabah.CIF),
+				NIK: int64(result.Nasabah.NIK),
+				NAMA: result.Nasabah.Nama,
+				ALAMAT: result.Nasabah.Alamat,
+				TEMPAT_LAHIR: result.Nasabah.Tempat_Lahir,
+				TANGGAL_LAHIR: result.Nasabah.Tanggal_Lahir,
+				NO_TELP: result.Nasabah.No_Telp,
+			},
+			NASABAH_DETAIL: &BranchDeliverySystem.NASABAH_DETAIL{
+				CIF: int64(result.NasabahDetail.CIF),
+				NO_REKENING: int64(result.NasabahDetail.No_Req),
+				SALDO: int64(result.NasabahDetail.Saldo),
+			},
+		}
+	}
+	return Respons,nil
+}
+// ============================================================================================================

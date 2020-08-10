@@ -711,7 +711,7 @@ var file_bds_proto_rawDesc = []byte{
 	0x41, 0x4e, 0x53, 0x41, 0x4b, 0x53, 0x49, 0x52, 0x09, 0x54, 0x52, 0x41, 0x4e, 0x53, 0x41, 0x4b,
 	0x53, 0x49, 0x22, 0x20, 0x0a, 0x06, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x12, 0x16, 0x0a, 0x06,
 	0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x73, 0x74,
-	0x61, 0x74, 0x75, 0x73, 0x22, 0x07, 0x0a, 0x05, 0x45, 0x4d, 0x50, 0x54, 0x59, 0x32, 0xf9, 0x04,
+	0x61, 0x74, 0x75, 0x73, 0x22, 0x07, 0x0a, 0x05, 0x45, 0x4d, 0x50, 0x54, 0x59, 0x32, 0xcd, 0x05,
 	0x0a, 0x03, 0x41, 0x64, 0x64, 0x12, 0x43, 0x0a, 0x09, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x55, 0x73,
 	0x65, 0x72, 0x12, 0x1a, 0x2e, 0x42, 0x72, 0x61, 0x6e, 0x63, 0x68, 0x44, 0x65, 0x6c, 0x69, 0x76,
 	0x65, 0x72, 0x79, 0x53, 0x79, 0x73, 0x74, 0x65, 0x6d, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x1a, 0x1a,
@@ -737,7 +737,7 @@ var file_bds_proto_rawDesc = []byte{
 	0x41, 0x4e, 0x53, 0x41, 0x4b, 0x53, 0x49, 0x1a, 0x1f, 0x2e, 0x42, 0x72, 0x61, 0x6e, 0x63, 0x68,
 	0x44, 0x65, 0x6c, 0x69, 0x76, 0x65, 0x72, 0x79, 0x53, 0x79, 0x73, 0x74, 0x65, 0x6d, 0x2e, 0x43,
 	0x45, 0x54, 0x41, 0x4b, 0x42, 0x55, 0x4b, 0x55, 0x12, 0x4e, 0x0a, 0x0e, 0x46, 0x69, 0x6e, 0x64,
-	0x42, 0x79, 0x4e, 0x49, 0x4b, 0x4f, 0x72, 0x4e, 0x69, 0x6b, 0x12, 0x1d, 0x2e, 0x42, 0x72, 0x61,
+	0x42, 0x79, 0x4e, 0x49, 0x4b, 0x4f, 0x72, 0x43, 0x49, 0x46, 0x12, 0x1d, 0x2e, 0x42, 0x72, 0x61,
 	0x6e, 0x63, 0x68, 0x44, 0x65, 0x6c, 0x69, 0x76, 0x65, 0x72, 0x79, 0x53, 0x79, 0x73, 0x74, 0x65,
 	0x6d, 0x2e, 0x4e, 0x41, 0x53, 0x41, 0x42, 0x41, 0x48, 0x1a, 0x1d, 0x2e, 0x42, 0x72, 0x61, 0x6e,
 	0x63, 0x68, 0x44, 0x65, 0x6c, 0x69, 0x76, 0x65, 0x72, 0x79, 0x53, 0x79, 0x73, 0x74, 0x65, 0x6d,
@@ -751,8 +751,13 @@ var file_bds_proto_rawDesc = []byte{
 	0x72, 0x79, 0x53, 0x79, 0x73, 0x74, 0x65, 0x6d, 0x2e, 0x4e, 0x41, 0x53, 0x41, 0x42, 0x41, 0x48,
 	0x5f, 0x49, 0x4e, 0x46, 0x4f, 0x1a, 0x22, 0x2e, 0x42, 0x72, 0x61, 0x6e, 0x63, 0x68, 0x44, 0x65,
 	0x6c, 0x69, 0x76, 0x65, 0x72, 0x79, 0x53, 0x79, 0x73, 0x74, 0x65, 0x6d, 0x2e, 0x4e, 0x41, 0x53,
-	0x41, 0x42, 0x41, 0x48, 0x5f, 0x49, 0x4e, 0x46, 0x4f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x41, 0x42, 0x41, 0x48, 0x5f, 0x49, 0x4e, 0x46, 0x4f, 0x12, 0x52, 0x0a, 0x0d, 0x55, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x4e, 0x61, 0x73, 0x61, 0x62, 0x61, 0x68, 0x12, 0x1d, 0x2e, 0x42, 0x72, 0x61,
+	0x6e, 0x63, 0x68, 0x44, 0x65, 0x6c, 0x69, 0x76, 0x65, 0x72, 0x79, 0x53, 0x79, 0x73, 0x74, 0x65,
+	0x6d, 0x2e, 0x4e, 0x41, 0x53, 0x41, 0x42, 0x41, 0x48, 0x1a, 0x22, 0x2e, 0x42, 0x72, 0x61, 0x6e,
+	0x63, 0x68, 0x44, 0x65, 0x6c, 0x69, 0x76, 0x65, 0x72, 0x79, 0x53, 0x79, 0x73, 0x74, 0x65, 0x6d,
+	0x2e, 0x4e, 0x41, 0x53, 0x41, 0x42, 0x41, 0x48, 0x5f, 0x49, 0x4e, 0x46, 0x4f, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -790,19 +795,21 @@ var file_bds_proto_depIdxs = []int32{
 	3,  // 7: BranchDeliverySystem.Add.TarikTunai:input_type -> BranchDeliverySystem.TRANSAKSI
 	5,  // 8: BranchDeliverySystem.Add.OverBooking:input_type -> BranchDeliverySystem.OVERBOOKING
 	3,  // 9: BranchDeliverySystem.Add.CetakBuku:input_type -> BranchDeliverySystem.TRANSAKSI
-	1,  // 10: BranchDeliverySystem.Add.FindByNIKOrNik:input_type -> BranchDeliverySystem.NASABAH
+	1,  // 10: BranchDeliverySystem.Add.FindByNIKOrCIF:input_type -> BranchDeliverySystem.NASABAH
 	1,  // 11: BranchDeliverySystem.Add.BuatCif:input_type -> BranchDeliverySystem.NASABAH
 	4,  // 12: BranchDeliverySystem.Add.BuatTabungan:input_type -> BranchDeliverySystem.NASABAH_INFO
-	0,  // 13: BranchDeliverySystem.Add.LoginUser:output_type -> BranchDeliverySystem.User
-	7,  // 14: BranchDeliverySystem.Add.SetorTunai:output_type -> BranchDeliverySystem.STATUS
-	7,  // 15: BranchDeliverySystem.Add.TarikTunai:output_type -> BranchDeliverySystem.STATUS
-	5,  // 16: BranchDeliverySystem.Add.OverBooking:output_type -> BranchDeliverySystem.OVERBOOKING
-	6,  // 17: BranchDeliverySystem.Add.CetakBuku:output_type -> BranchDeliverySystem.CETAKBUKU
-	1,  // 18: BranchDeliverySystem.Add.FindByNIKOrNik:output_type -> BranchDeliverySystem.NASABAH
-	1,  // 19: BranchDeliverySystem.Add.BuatCif:output_type -> BranchDeliverySystem.NASABAH
-	4,  // 20: BranchDeliverySystem.Add.BuatTabungan:output_type -> BranchDeliverySystem.NASABAH_INFO
-	13, // [13:21] is the sub-list for method output_type
-	5,  // [5:13] is the sub-list for method input_type
+	1,  // 13: BranchDeliverySystem.Add.UpdateNasabah:input_type -> BranchDeliverySystem.NASABAH
+	0,  // 14: BranchDeliverySystem.Add.LoginUser:output_type -> BranchDeliverySystem.User
+	7,  // 15: BranchDeliverySystem.Add.SetorTunai:output_type -> BranchDeliverySystem.STATUS
+	7,  // 16: BranchDeliverySystem.Add.TarikTunai:output_type -> BranchDeliverySystem.STATUS
+	5,  // 17: BranchDeliverySystem.Add.OverBooking:output_type -> BranchDeliverySystem.OVERBOOKING
+	6,  // 18: BranchDeliverySystem.Add.CetakBuku:output_type -> BranchDeliverySystem.CETAKBUKU
+	1,  // 19: BranchDeliverySystem.Add.FindByNIKOrCIF:output_type -> BranchDeliverySystem.NASABAH
+	1,  // 20: BranchDeliverySystem.Add.BuatCif:output_type -> BranchDeliverySystem.NASABAH
+	4,  // 21: BranchDeliverySystem.Add.BuatTabungan:output_type -> BranchDeliverySystem.NASABAH_INFO
+	4,  // 22: BranchDeliverySystem.Add.UpdateNasabah:output_type -> BranchDeliverySystem.NASABAH_INFO
+	14, // [14:23] is the sub-list for method output_type
+	5,  // [5:14] is the sub-list for method input_type
 	5,  // [5:5] is the sub-list for extension type_name
 	5,  // [5:5] is the sub-list for extension extendee
 	0,  // [0:5] is the sub-list for field type_name
@@ -960,9 +967,10 @@ type AddClient interface {
 	TarikTunai(ctx context.Context, in *TRANSAKSI, opts ...grpc.CallOption) (*STATUS, error)
 	OverBooking(ctx context.Context, in *OVERBOOKING, opts ...grpc.CallOption) (*OVERBOOKING, error)
 	CetakBuku(ctx context.Context, in *TRANSAKSI, opts ...grpc.CallOption) (*CETAKBUKU, error)
-	FindByNIKOrNik(ctx context.Context, in *NASABAH, opts ...grpc.CallOption) (*NASABAH, error)
+	FindByNIKOrCIF(ctx context.Context, in *NASABAH, opts ...grpc.CallOption) (*NASABAH, error)
 	BuatCif(ctx context.Context, in *NASABAH, opts ...grpc.CallOption) (*NASABAH, error)
 	BuatTabungan(ctx context.Context, in *NASABAH_INFO, opts ...grpc.CallOption) (*NASABAH_INFO, error)
+	UpdateNasabah(ctx context.Context, in *NASABAH, opts ...grpc.CallOption) (*NASABAH_INFO, error)
 }
 
 type addClient struct {
@@ -1018,9 +1026,9 @@ func (c *addClient) CetakBuku(ctx context.Context, in *TRANSAKSI, opts ...grpc.C
 	return out, nil
 }
 
-func (c *addClient) FindByNIKOrNik(ctx context.Context, in *NASABAH, opts ...grpc.CallOption) (*NASABAH, error) {
+func (c *addClient) FindByNIKOrCIF(ctx context.Context, in *NASABAH, opts ...grpc.CallOption) (*NASABAH, error) {
 	out := new(NASABAH)
-	err := c.cc.Invoke(ctx, "/BranchDeliverySystem.Add/FindByNIKOrNik", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/BranchDeliverySystem.Add/FindByNIKOrCIF", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1045,6 +1053,15 @@ func (c *addClient) BuatTabungan(ctx context.Context, in *NASABAH_INFO, opts ...
 	return out, nil
 }
 
+func (c *addClient) UpdateNasabah(ctx context.Context, in *NASABAH, opts ...grpc.CallOption) (*NASABAH_INFO, error) {
+	out := new(NASABAH_INFO)
+	err := c.cc.Invoke(ctx, "/BranchDeliverySystem.Add/UpdateNasabah", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AddServer is the server API for Add service.
 type AddServer interface {
 	LoginUser(context.Context, *User) (*User, error)
@@ -1052,9 +1069,10 @@ type AddServer interface {
 	TarikTunai(context.Context, *TRANSAKSI) (*STATUS, error)
 	OverBooking(context.Context, *OVERBOOKING) (*OVERBOOKING, error)
 	CetakBuku(context.Context, *TRANSAKSI) (*CETAKBUKU, error)
-	FindByNIKOrNik(context.Context, *NASABAH) (*NASABAH, error)
+	FindByNIKOrCIF(context.Context, *NASABAH) (*NASABAH, error)
 	BuatCif(context.Context, *NASABAH) (*NASABAH, error)
 	BuatTabungan(context.Context, *NASABAH_INFO) (*NASABAH_INFO, error)
+	UpdateNasabah(context.Context, *NASABAH) (*NASABAH_INFO, error)
 }
 
 // UnimplementedAddServer can be embedded to have forward compatible implementations.
@@ -1076,14 +1094,17 @@ func (*UnimplementedAddServer) OverBooking(context.Context, *OVERBOOKING) (*OVER
 func (*UnimplementedAddServer) CetakBuku(context.Context, *TRANSAKSI) (*CETAKBUKU, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CetakBuku not implemented")
 }
-func (*UnimplementedAddServer) FindByNIKOrNik(context.Context, *NASABAH) (*NASABAH, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindByNIKOrNik not implemented")
+func (*UnimplementedAddServer) FindByNIKOrCIF(context.Context, *NASABAH) (*NASABAH, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindByNIKOrCIF not implemented")
 }
 func (*UnimplementedAddServer) BuatCif(context.Context, *NASABAH) (*NASABAH, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BuatCif not implemented")
 }
 func (*UnimplementedAddServer) BuatTabungan(context.Context, *NASABAH_INFO) (*NASABAH_INFO, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BuatTabungan not implemented")
+}
+func (*UnimplementedAddServer) UpdateNasabah(context.Context, *NASABAH) (*NASABAH_INFO, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateNasabah not implemented")
 }
 
 func RegisterAddServer(s *grpc.Server, srv AddServer) {
@@ -1180,20 +1201,20 @@ func _Add_CetakBuku_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Add_FindByNIKOrNik_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Add_FindByNIKOrCIF_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(NASABAH)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AddServer).FindByNIKOrNik(ctx, in)
+		return srv.(AddServer).FindByNIKOrCIF(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/BranchDeliverySystem.Add/FindByNIKOrNik",
+		FullMethod: "/BranchDeliverySystem.Add/FindByNIKOrCIF",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AddServer).FindByNIKOrNik(ctx, req.(*NASABAH))
+		return srv.(AddServer).FindByNIKOrCIF(ctx, req.(*NASABAH))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1234,6 +1255,24 @@ func _Add_BuatTabungan_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Add_UpdateNasabah_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NASABAH)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AddServer).UpdateNasabah(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BranchDeliverySystem.Add/UpdateNasabah",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AddServer).UpdateNasabah(ctx, req.(*NASABAH))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Add_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "BranchDeliverySystem.Add",
 	HandlerType: (*AddServer)(nil),
@@ -1259,8 +1298,8 @@ var _Add_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Add_CetakBuku_Handler,
 		},
 		{
-			MethodName: "FindByNIKOrNik",
-			Handler:    _Add_FindByNIKOrNik_Handler,
+			MethodName: "FindByNIKOrCIF",
+			Handler:    _Add_FindByNIKOrCIF_Handler,
 		},
 		{
 			MethodName: "BuatCif",
@@ -1269,6 +1308,10 @@ var _Add_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "BuatTabungan",
 			Handler:    _Add_BuatTabungan_Handler,
+		},
+		{
+			MethodName: "UpdateNasabah",
+			Handler:    _Add_UpdateNasabah_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -66,8 +66,8 @@ func main() {
 	//	fmt.Println(check1)
 	//	fmt.Println("nik ",cif.NIK,"sudah di gunakan")
 	//}
-	result, _ := FindByNIKOrNik(3603172102970002)
-	fmt.Println(result)
+	//result, _ := FindByNIKOrNik(3603172102970002)
+	//fmt.Println(result)
 	//result, isExist := FindByCif(1000000000)
 	//fmt.Println(result)
 	//if isExist {
@@ -75,10 +75,15 @@ func main() {
 	//}else {
 	//	fmt.Println("cif tidak ditemukan cif")
 	//}
+
+	// management crud
+	result, _ := FindByNIKOrNik(1000000000)
+	fmt.Println(result.CIF)
+	result1, _ := UpdateNasabah(423423432, "rudi", "cianjur", "15/20/1995", "jakarta", "08161309852",int(result.CIF))
+	fmt.Println(result1)
 }
 
-//stor tunai client
-//====================================================================================================
+//stor tunai client ========================================================================================
 func SetorTunai(no_req, nominal int, berita string, id_User int) bool {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
@@ -109,9 +114,8 @@ func SetorTunai(no_req, nominal int, berita string, id_User int) bool {
 
 }
 
-//====================================================================================================
-//tarik tunai client
-//====================================================================================================
+//end stor tunai client===================================================================================
+//tarik tunai client=======================================================================================
 func TarikTunai(no_req, nominal int, berita string, idUser int) bool {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
@@ -142,9 +146,8 @@ func TarikTunai(no_req, nominal int, berita string, idUser int) bool {
 
 }
 
-//====================================================================================================
-//Cetak Buku client
-//====================================================================================================
+//end tarik tunai client========================================================================================
+//Cetak Buku client ========================================================================================
 func CetakBuku(no_rekening int64) (*BranchDeliverySystem.CETAKBUKU, bool) {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
@@ -167,9 +170,8 @@ func CetakBuku(no_rekening int64) (*BranchDeliverySystem.CETAKBUKU, bool) {
 	}
 }
 
-//====================================================================================================
-//overbooking client
-//====================================================================================================
+// end Cetak Buku client ======================================================================================
+//overbooking client ========================================================================================
 func Overbooking(id_User int, norekAsal, noRekTujuan, nominal int64, berita string) (*BranchDeliverySystem.OVERBOOKING, bool) {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
@@ -205,8 +207,7 @@ func Overbooking(id_User int, norekAsal, noRekTujuan, nominal int64, berita stri
 	}
 }
 
-//====================================================================================================
-
+//end overbooking client===================================================================================
 // login ==============================================================================================
 func Login(id_user int, password string) (bool, string, string) {
 	// Set up a connection to the server.
@@ -244,8 +245,7 @@ func Login(id_user int, password string) (bool, string, string) {
 	}
 }
 
-//=====================================================================================================
-
+//end of login ==============================================================================================
 // find cif ===========================================================================================
 func FindByNIKOrNik(seach int64) (*BranchDeliverySystem.NASABAH, bool) {
 	// Set up a connection to the server.
@@ -260,7 +260,7 @@ func FindByNIKOrNik(seach int64) (*BranchDeliverySystem.NASABAH, bool) {
 
 	c := BranchDeliverySystem.NewAddClient(conn)
 	// call method setor tunai
-	respons, err := c.FindByNIKOrNik(ctx, &BranchDeliverySystem.NASABAH{
+	respons, err := c.FindByNIKOrCIF(ctx, &BranchDeliverySystem.NASABAH{
 		NIK: seach,
 	})
 	if respons.GetCIF() != 0 {
@@ -270,9 +270,8 @@ func FindByNIKOrNik(seach int64) (*BranchDeliverySystem.NASABAH, bool) {
 	}
 }
 
-//====================================================================================================
-
-
+// end of find NIK or CIF ============================================================================================
+// buat cif ===========================================================================================
 func BuatCif(nik int64, nama, tempat_lahir, tanggal_lahir, alamat, no_telp string) (*BranchDeliverySystem.NASABAH, bool) {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
@@ -301,9 +300,8 @@ func BuatCif(nik int64, nama, tempat_lahir, tanggal_lahir, alamat, no_telp strin
 	}
 }
 
-//==================================================================================================
-
-//====================================================================================================
+//end buat cif ============================================================================================
+//buat tabungan =======================================================================================
 func BuatTabungan(cif, saldo int64) (*BranchDeliverySystem.NASABAH_INFO, bool) {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
@@ -328,4 +326,35 @@ func BuatTabungan(cif, saldo int64) (*BranchDeliverySystem.NASABAH_INFO, bool) {
 	}
 }
 
-//==================================================================================================
+//end buat tabungan =======================================================================================
+// update nasabah =========================================================================================
+func UpdateNasabah(nik int, nama, tempat_lahir, tanggal_lahir, alamat, no_telpon string, cif int) (*BranchDeliverySystem.NASABAH_INFO, bool) {
+	// Set up a connection to the server.
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	c := BranchDeliverySystem.NewAddClient(conn)
+	// call method setor tunai
+	respons, err := c.UpdateNasabah(ctx, &BranchDeliverySystem.NASABAH{
+		CIF:           int64(cif),
+		NIK:           int64(nik),
+		NAMA:          nama,
+		TEMPAT_LAHIR:  tempat_lahir,
+		TANGGAL_LAHIR: tanggal_lahir,
+		ALAMAT:        alamat,
+		NO_TELP:       no_telpon,
+	})
+	if respons != nil {
+		return respons, true
+	} else {
+		return respons, false
+	}
+}
+
+// end of update nasabah =========================================================================================

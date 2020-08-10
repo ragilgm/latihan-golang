@@ -16,8 +16,35 @@ import (
 
 type server struct {
 }
+// update nasabah ================================================================================================
+func (s *server) UpdateNasabah(ctx context.Context, nasabah *BranchDeliverySystem.NASABAH) (*BranchDeliverySystem.NASABAH_INFO, error) {
+	db, err := config.GetMysqlDB()
+	if err != nil {
+		panic(err)
+	}
+		con := services.UserModels{
+			DB: db,
+		}
+		dataNasabah := entities.Nasabah{
+			CIF: int(nasabah.GetCIF()),
+			NIK: int(nasabah.GetNIK()),
+			Nama: nasabah.GetNAMA(),
+			Tempat_Lahir: nasabah.GetTEMPAT_LAHIR(),
+			Tanggal_Lahir: nasabah.GetTANGGAL_LAHIR(),
+			Alamat: nasabah.GetALAMAT(),
+			No_Telp: nasabah.GetNO_TELP(),
+		}
+		// call method stor tunai for check no rek exist or not
+		userDetails, err := con.UpdateNasabah(dataNasabah)
+		fmt.Println(userDetails)
+		if err != nil {
+			panic(err)
+		}
+		return userDetails,nil
+}
+// update nasabah =======================================================================================================
 
-// method setor tunai server
+// method setor tunai server ==================================================================================================
 func (s *server) SetorTunai(_ context.Context, transaksi *BranchDeliverySystem.TRANSAKSI) (*BranchDeliverySystem.STATUS, error) {
 	var status int
 	db, err := config.GetMysqlDB()
@@ -68,6 +95,7 @@ func (s *server) SetorTunai(_ context.Context, transaksi *BranchDeliverySystem.T
 	}, nil
 
 }
+// end of setor tunai ==================================================================================================================
 
 // method tarik tunai server ========================================================================================================
 func (s *server) TarikTunai(_ context.Context, transaksi *BranchDeliverySystem.TRANSAKSI) (*BranchDeliverySystem.STATUS, error) {
@@ -117,7 +145,6 @@ func (s *server) TarikTunai(_ context.Context, transaksi *BranchDeliverySystem.T
 		Status: int64(status),
 	}, nil
 }
-
 // end of method tarik tunai server =================================================================================================
 
 // method OverBooking server ========================================================================================================
@@ -172,7 +199,6 @@ func (s *server) OverBooking(_ context.Context, overbooking *BranchDeliverySyste
 
 	}
 }
-
 // end of method OverBooking server =================================================================================================
 
 // method cetak buku ================================================================================================================
@@ -210,13 +236,11 @@ func (s *server) CetakBuku(_ context.Context, transaksi *BranchDeliverySystem.TR
 	}, nil
 
 }
-
 // end of method cetak buku ========================================================================================================
 
 // method Find Nasabah by nik atau cif ========================================================================================================
-func (s *server) FindByNIKOrNik(_ context.Context, nasabah *BranchDeliverySystem.NASABAH) (*BranchDeliverySystem.NASABAH, error) {
+func (s *server) FindByNIKOrCIF(_ context.Context, nasabah *BranchDeliverySystem.NASABAH) (*BranchDeliverySystem.NASABAH, error) {
 	db, err := config.GetMysqlDB()
-
 	con := services.UserModels{
 		db,
 	}
@@ -244,7 +268,6 @@ func (s *server) FindByNIKOrNik(_ context.Context, nasabah *BranchDeliverySystem
 	}
 	return &u, nil
 }
-
 //=============== end of find nik or cif ===================================================================================================
 
 // Buat cif ========================================================================================================
@@ -341,9 +364,7 @@ func (s *server) LoginUser(_ context.Context, user *BranchDeliverySystem.User) (
 		return &u, nil
 	}
 }
-
 // end of login user ==============================================================================================================
-
 func main() {
 	const (
 		port = ":1010"
