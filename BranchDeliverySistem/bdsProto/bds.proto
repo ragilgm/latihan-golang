@@ -51,8 +51,6 @@ message OVERBOOKING {
  string BERITA = 5;
 }
 
-
-
 message CETAKBUKU {
   repeated TRANSAKSI TRANSAKSI= 1;
 }
@@ -70,5 +68,9 @@ service Add {
   rpc TarikTunai(TRANSAKSI) returns (STATUS);
   rpc OverBooking(OVERBOOKING) returns (OVERBOOKING);
   rpc CetakBuku(TRANSAKSI) returns (CETAKBUKU);
-  rpc FindCif(NASABAH) returns (NASABAH);
+  rpc FindByNIK(NASABAH) returns (NASABAH);
+  rpc FindByCIF(NASABAH) returns (NASABAH_INFO);
+  rpc BuatCif(NASABAH) returns (NASABAH);
+  rpc BuatTabungan(NASABAH_INFO) returns (NASABAH_INFO);
+
 }

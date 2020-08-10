@@ -7,6 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	BranchDeliverySystem "github.com/ragilmaulana/restapi/tugas-golang/BranchDeliverySistem/bdsProto"
 	"github.com/ragilmaulana/restapi/tugas-golang/BranchDeliverySistem/config"
+	"github.com/ragilmaulana/restapi/tugas-golang/BranchDeliverySistem/entities"
 	"github.com/ragilmaulana/restapi/tugas-golang/BranchDeliverySistem/services"
 	"google.golang.org/grpc"
 	"log"
@@ -116,6 +117,7 @@ func (s *server) TarikTunai(_ context.Context, transaksi *BranchDeliverySystem.T
 		Status: int64(status),
 	}, nil
 }
+
 // end of method tarik tunai server =================================================================================================
 
 // method OverBooking server ========================================================================================================
@@ -140,7 +142,7 @@ func (s *server) OverBooking(_ context.Context, overbooking *BranchDeliverySyste
 		fmt.Println("called")
 		if err != nil {
 			panic(err)
-		} else {
+		}
 			fmt.Println("called")
 			checkReqTujuan, err := con.FindNoRek(int(RekTujuan))
 			fmt.Println(checkReqTujuan)
@@ -154,7 +156,7 @@ func (s *server) OverBooking(_ context.Context, overbooking *BranchDeliverySyste
 				}
 				fmt.Println(over)
 			}
-		}
+
 		return &BranchDeliverySystem.OVERBOOKING{
 			NasabahDetail1: &BranchDeliverySystem.NASABAH_DETAIL{
 				CIF:         int64(checkReqAwal.CIF),
@@ -162,14 +164,15 @@ func (s *server) OverBooking(_ context.Context, overbooking *BranchDeliverySyste
 				SALDO:       int64(checkReqAwal.Saldo) - overbooking.GetNominal(),
 			},
 			NasabahDetail2: &BranchDeliverySystem.NASABAH_DETAIL{
-				CIF:         int64(checkReqAwal.CIF),
-				NO_REKENING: int64(checkReqAwal.No_Req),
-				SALDO:       int64(checkReqAwal.Saldo) - overbooking.GetNominal(),
+				CIF:         int64(checkReqTujuan.CIF),
+				NO_REKENING: int64(checkReqTujuan.No_Req),
+				SALDO:       int64(checkReqTujuan.Saldo) + overbooking.GetNominal(),
 			},
 		}, nil
 
 	}
 }
+
 // end of method OverBooking server =================================================================================================
 
 // method cetak buku ================================================================================================================
@@ -188,7 +191,6 @@ func (s *server) CetakBuku(_ context.Context, transaksi *BranchDeliverySystem.TR
 		if err != nil {
 			panic(err)
 		}
-
 		for _, velue := range users {
 			trx := BranchDeliverySystem.TRANSAKSI{
 				ID:              int64(velue.Id_Transaksi),
@@ -208,36 +210,141 @@ func (s *server) CetakBuku(_ context.Context, transaksi *BranchDeliverySystem.TR
 	}, nil
 
 }
+
 // end of method cetak buku ========================================================================================================
 
-// method Find Nasabah by cif ========================================================================================================
-func (s *server) FindCif(_ context.Context, nasabah *BranchDeliverySystem.NASABAH) (*BranchDeliverySystem.NASABAH, error) {
+// method Find Nasabah by nik ========================================================================================================
+func (s *server) FindByNIK(_ context.Context, nasabah *BranchDeliverySystem.NASABAH) (*BranchDeliverySystem.NASABAH, error) {
 	db, err := config.GetMysqlDB()
 
 	con := services.UserModels{
 		db,
 	}
-	no_cif := nasabah.GetCIF()
-
-	n, err := con.FindCif(int(no_cif))
+	nik := nasabah.GetNIK()
+	fmt.Println(nik)
+	n, err := con.FindNik(int(nik))
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println(n)
-	//if n != 0 {
-		u := BranchDeliverySystem.NASABAH{
-			CIF:           int64(n.CIF),
-			NIK:           int64(n.NIK),
-			NAMA:          n.Nama,
-			TEMPAT_LAHIR:  n.Tempat_Lahir,
-			TANGGAL_LAHIR: n.Tanggal_Lahir,
-			ALAMAT:        n.Alamat,
-			NO_TELP:       nasabah.NO_TELP,
-		}
-		return &u, nil
+	u := BranchDeliverySystem.NASABAH{
+		CIF:           int64(n.CIF),
+		NIK:           int64(n.NIK),
+		NAMA:          n.Nama,
+		TEMPAT_LAHIR:  n.Tempat_Lahir,
+		TANGGAL_LAHIR: n.Tanggal_Lahir,
+		ALAMAT:        n.Alamat,
+		NO_TELP:       nasabah.NO_TELP,
+	}
+	return &u, nil
 }
+
+//=============== end of find nik ===================================================================================================
+
+// method Find Nasabah by Cif ========================================================================================================
+func (s *server) FindByCIF(_ context.Context, nasabah *BranchDeliverySystem.NASABAH) (*BranchDeliverySystem.NASABAH_INFO, error) {
+	db, err := config.GetMysqlDB()
+
+	con := services.UserModels{
+		db,
+	}
+	cif := nasabah.GetCIF()
+	fmt.Println(cif)
+	n, err := con.PrintNasabahInfoByCif(int(cif))
+	if err != nil {
+		panic(err)
+	}
+
+	if n.NasabahDetail.CIF == 0 {
+		return nil, nil
+	} else {
+		return &BranchDeliverySystem.NASABAH_INFO{
+			NASABAH: &BranchDeliverySystem.NASABAH{
+				CIF:           int64(n.Nasabah.CIF),
+				NIK:           int64(n.Nasabah.NIK),
+				NAMA:          n.Nasabah.Nama,
+				TEMPAT_LAHIR:  n.Nasabah.Tempat_Lahir,
+				TANGGAL_LAHIR: n.Nasabah.Tanggal_Lahir,
+				ALAMAT:        n.Nasabah.Alamat,
+				NO_TELP:       n.Nasabah.No_Telp,
+			}, NASABAH_DETAIL: &BranchDeliverySystem.NASABAH_DETAIL{
+				CIF:         int64(n.NasabahDetail.CIF),
+				NO_REKENING: int64(n.NasabahDetail.No_Req),
+				SALDO:       int64(n.NasabahDetail.Saldo),
+			},
+		}, nil
+	}
+}
+
 //=============== end of find cif ===================================================================================================
 
+// Buat cif ========================================================================================================
+func (s *server) BuatCif(_ context.Context, nasabah *BranchDeliverySystem.NASABAH) (*BranchDeliverySystem.NASABAH, error) {
+	db, err := config.GetMysqlDB()
+
+	con := services.UserModels{
+		db,
+	}
+	create := entities.Nasabah{
+		CIF:           int(nasabah.GetCIF()),
+		NIK:           int(nasabah.GetNIK()),
+		Nama:          nasabah.GetNAMA(),
+		Tempat_Lahir:  nasabah.GetTEMPAT_LAHIR(),
+		Tanggal_Lahir: nasabah.GetTANGGAL_LAHIR(),
+		Alamat:        nasabah.GetALAMAT(),
+		No_Telp:       nasabah.GetNO_TELP(),
+	}
+	n, err := con.BuatCIF(create)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(n)
+
+	return &BranchDeliverySystem.NASABAH{
+		CIF:           int64(n.CIF),
+		NIK:           int64(n.NIK),
+		NAMA:          n.Nama,
+		TEMPAT_LAHIR:  n.Tempat_Lahir,
+		TANGGAL_LAHIR: n.Tanggal_Lahir,
+		ALAMAT:        n.Alamat,
+		NO_TELP:       n.No_Telp,
+	}, nil
+}
+
+//=============== end of buat ===================================================================================================
+
+// Buat tabungan ========================================================================================================
+func (s *server) BuatTabungan(_ context.Context, nasabah *BranchDeliverySystem.NASABAH_INFO) (*BranchDeliverySystem.NASABAH_INFO, error) {
+	db, err := config.GetMysqlDB()
+
+	con := services.UserModels{
+		db,
+	}
+	cif := nasabah.NASABAH.GetCIF()
+	saldo := nasabah.NASABAH_DETAIL.GetSALDO()
+
+	n, err := con.BuatTabungan(cif, saldo)
+	if err != nil {
+		panic(err)
+	}
+	return &BranchDeliverySystem.NASABAH_INFO{
+		NASABAH: &BranchDeliverySystem.NASABAH{
+			CIF:           int64(n.Nasabah.CIF),
+			NIK:           int64(n.Nasabah.NIK),
+			NAMA:          n.Nasabah.Nama,
+			TEMPAT_LAHIR:  n.Nasabah.Tempat_Lahir,
+			TANGGAL_LAHIR: n.Nasabah.Tanggal_Lahir,
+			ALAMAT:        n.Nasabah.Alamat,
+			NO_TELP:       n.Nasabah.No_Telp,
+		}, NASABAH_DETAIL: &BranchDeliverySystem.NASABAH_DETAIL{
+			CIF:         int64(n.NasabahDetail.CIF),
+			NO_REKENING: int64(n.NasabahDetail.No_Req),
+			SALDO:       int64(n.NasabahDetail.Saldo),
+		},
+	}, nil
+}
+
+//=============== end of buat ===================================================================================================
 
 // method login server ==============================================================================================================
 func (s *server) LoginUser(_ context.Context, user *BranchDeliverySystem.User) (*BranchDeliverySystem.User, error) {
@@ -267,13 +374,13 @@ func (s *server) LoginUser(_ context.Context, user *BranchDeliverySystem.User) (
 		return &u, nil
 	}
 }
+
 // end of login user ==============================================================================================================
 
 func main() {
 	const (
 		port = ":1010"
 	)
-
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

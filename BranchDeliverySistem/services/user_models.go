@@ -39,7 +39,7 @@ func (um UserModels) Login(idUser int, password string) (User, error) {
 
 // check nasabah exist or not ========================================================================
 func (um UserModels) FindNoRek(rekeningTujuan int) (NasabahDetail, error) {
-	rows, err := um.DB.Query("SELECT * FROM nasabah_detail where no_req=?", rekeningTujuan)
+	rows, err := um.DB.Query("SELECT * FROM nasabah_detail where no_rekening=?", rekeningTujuan)
 	if err != nil {
 		panic(err)
 	} else {
@@ -63,6 +63,7 @@ func (um UserModels) FindNoRek(rekeningTujuan int) (NasabahDetail, error) {
 		return nasabahDetail, nil
 	}
 }
+
 //===================================================================================================
 
 // service setor tunai to db ==================================================================================
@@ -72,10 +73,10 @@ func (um UserModels) SetorTunaiService(userId int, nasabah NasabahDetail, berita
 	jenisTransaksi := "st"
 	currentSaldo := saldo + nominal
 	rows, err := um.DB.Exec(
-		"insert into transaksi (id_user, no_req,tanggal,jenis_transaksi,nominal,saldo,berita)values(?,?,?,?,?,?,?)",
+		"insert into transaksi (id_user, no_rekening,tanggal,jenis_transaksi,nominal,saldo,berita)values(?,?,?,?,?,?,?)",
 		userId, nasabah.No_Req, tanggal, jenisTransaksi, nominal, currentSaldo, berita)
 	_, err = um.DB.Exec(
-		"update nasabah_detail set saldo = ? where no_req=?", currentSaldo, nasabah.No_Req)
+		"update nasabah_detail set saldo = ? where no_rekening=?", currentSaldo, nasabah.No_Req)
 	if err != nil {
 		return 0, err
 	} else {
@@ -83,6 +84,7 @@ func (um UserModels) SetorTunaiService(userId int, nasabah NasabahDetail, berita
 		return int(idUser), nil
 	}
 }
+
 // end of service store tunai ================================================================================
 
 // insert setor tunai to db ==================================================================================
@@ -96,10 +98,10 @@ func (um UserModels) TarikTunaiService(userId int, nasabah NasabahDetail, berita
 	} else {
 		currentSaldo := nasabah.Saldo - nominal
 		rows, err := um.DB.Exec(
-			"insert into transaksi (id_user, no_req,tanggal,jenis_transaksi,nominal,saldo,berita)value(?,?,?,?,?,?,?)",
+			"insert into transaksi (id_user, no_rekening,tanggal,jenis_transaksi,nominal,saldo,berita)value(?,?,?,?,?,?,?)",
 			userId, nasabah.No_Req, tanggal, jenisTransaksi, nominal, currentSaldo, berita)
 		_, err = um.DB.Exec(
-			"update nasabah_detail set saldo = ? where no_req=?", currentSaldo, nasabah.No_Req)
+			"update nasabah_detail set saldo = ? where ne_rekening=?", currentSaldo, nasabah.No_Req)
 		if err != nil {
 			return 0, err
 		} else {
@@ -108,6 +110,7 @@ func (um UserModels) TarikTunaiService(userId int, nasabah NasabahDetail, berita
 		}
 	}
 }
+
 // end of insert service =====================================================================================
 
 // service overbooking =======================================================================================
@@ -123,24 +126,24 @@ func (um UserModels) Overbooking(idUser int, rekeningAwal, rekeingTujuan Nasabah
 		fmt.Println(saldoRekTujuan)
 		jenisTransaksi := "pb"
 		insertRekUtama, err := um.DB.Exec(
-			"insert into transaksi (id_user, no_req,tanggal,jenis_transaksi,nominal,saldo,berita)values(?,?,?,?,?,?,?)",
+			"insert into transaksi (id_user, no_rekening,tanggal,jenis_transaksi,nominal,saldo,berita)values(?,?,?,?,?,?,?)",
 			idUser, rekeningAwal.No_Req, tanggal, jenisTransaksi, nominal, saldoRekAwal, berita)
 		if err != nil {
 			panic(err)
 		}
 		fmt.Println(insertRekUtama)
-		update, err := um.DB.Exec("update nasabah_detail set saldo = ? where no_req=?", saldoRekAwal, rekeningAwal.No_Req)
+		update, err := um.DB.Exec("update nasabah_detail set saldo = ? where no_rekening=?", saldoRekAwal, rekeningAwal.No_Req)
 		if err != nil {
 			panic(err)
 		}
 		fmt.Println(update)
-		insertRekKedua, err := um.DB.Exec("insert into transaksi (id_user, no_req,tanggal,jenis_transaksi,nominal,saldo,berita)values(?,?,?,?,?,?,?)",
+		insertRekKedua, err := um.DB.Exec("insert into transaksi (id_user, no_rekening,tanggal,jenis_transaksi,nominal,saldo,berita)values(?,?,?,?,?,?,?)",
 			idUser, rekeingTujuan.No_Req, tanggal, jenisTransaksi, nominal, saldoRekTujuan, berita)
 		if err != nil {
 			panic(err)
 		}
 		fmt.Println(insertRekKedua)
-		updateRekTujuan, err := um.DB.Exec("update nasabah_detail set saldo = ? where no_req=?", saldoRekTujuan, rekeingTujuan.No_Req)
+		updateRekTujuan, err := um.DB.Exec("update nasabah_detail set saldo = ? where no_rekening=?", saldoRekTujuan, rekeingTujuan.No_Req)
 		if err != nil {
 			panic(err)
 		}
@@ -149,11 +152,12 @@ func (um UserModels) Overbooking(idUser int, rekeningAwal, rekeingTujuan Nasabah
 	}
 	return idUser, nil
 }
+
 // end service overbooking ===================================================================================
 
 // service cetak buku ========================================================================================
 func (um UserModels) CetakBuku(no_rekening int) ([]Transaksi, error) {
-	rows, err := um.DB.Query("SELECT * FROM transaksi WHERE no_req=?", no_rekening)
+	rows, err := um.DB.Query("SELECT * FROM transaksi WHERE no_rekening=?", no_rekening)
 	if err != nil {
 		return []Transaksi{}, err
 	} else {
@@ -187,12 +191,12 @@ func (um UserModels) CetakBuku(no_rekening int) ([]Transaksi, error) {
 		return transaksi, nil
 	}
 }
+
 // end service cetak buku ====================================================================================
 
-
 // find nasabah by no req ====================================================================================
-func (um UserModels) PrintNasabahInfoByRekening(nomor_rekening int) (NasabahInfo, error){
-	rows, err := um.DB.Query("SELECT * FROM nasabah INNER JOIN nasabah_detail ON nasabah.cif = nasabah_detail.cif WHERE no_req=?", nomor_rekening)
+func (um UserModels) PrintNasabahInfoByRekening(nomor_rekening int) (NasabahInfo, error) {
+	rows, err := um.DB.Query("SELECT * FROM nasabah INNER JOIN nasabah_detail ON nasabah.cif = nasabah_detail.cif WHERE no_rekening=?", nomor_rekening)
 	if err != nil {
 		panic(err)
 	} else {
@@ -208,23 +212,23 @@ func (um UserModels) PrintNasabahInfoByRekening(nomor_rekening int) (NasabahInfo
 			var no_telp string
 			var no_req int
 			var saldo int
-			err2 := rows.Scan(&cif, &nik, &nama, &tempat_lahir, &tanggal_lahir, &alamat, &no_telp,&cif,&no_req, &saldo)
+			err2 := rows.Scan(&cif, &nik, &nama, &tempat_lahir, &tanggal_lahir, &alamat, &no_telp, &cif, &no_req, &saldo)
 			if err2 != nil {
 				panic(err2)
 			} else {
 				nasabahInfo = NasabahInfo{
 					Nasabah: Nasabah{
-						CIF: cif,
-						NIK: nik,
-						Nama: nama,
+						CIF:          cif,
+						NIK:          nik,
+						Nama:         nama,
 						Tempat_Lahir: tempat_lahir,
-						Alamat: alamat,
-						No_Telp: no_telp,
+						Alamat:       alamat,
+						No_Telp:      no_telp,
 					},
 					NasabahDetail: NasabahDetail{
-						CIF: cif,
+						CIF:    cif,
 						No_Req: no_req,
-						Saldo: saldo,
+						Saldo:  saldo,
 					},
 				}
 
@@ -234,12 +238,12 @@ func (um UserModels) PrintNasabahInfoByRekening(nomor_rekening int) (NasabahInfo
 		return nasabahInfo, nil
 	}
 }
+
 //====================================================================================================================
 
-
 // find nasabah detail by cif ========================================================================================
-func (um UserModels) PrintNasabahInfoByCif(cif int) (NasabahInfo, error){
-	rows, err := um.DB.Query("SELECT * FROM nasabah INNER JOIN nasabah_detail ON nasabah.cif = nasabah_detail.cif WHERE cif=?", cif)
+func (um UserModels) PrintNasabahInfoByCif(cif int) (NasabahInfo, error) {
+	rows, err := um.DB.Query("SELECT * FROM nasabah INNER JOIN nasabah_detail ON nasabah.cif = nasabah_detail.cif WHERE nasabah.cif=?", cif)
 	if err != nil {
 		panic(err)
 	} else {
@@ -255,23 +259,23 @@ func (um UserModels) PrintNasabahInfoByCif(cif int) (NasabahInfo, error){
 			var no_telp string
 			var no_req int
 			var saldo int
-			err2 := rows.Scan(&cif, &nik, &nama, &tempat_lahir, &tanggal_lahir, &alamat, &no_telp,&cif,&no_req, &saldo)
+			err2 := rows.Scan(&cif, &nik, &nama, &tempat_lahir, &tanggal_lahir, &alamat, &no_telp, &cif, &no_req, &saldo)
 			if err2 != nil {
 				panic(err2)
 			} else {
 				nasabahInfo = NasabahInfo{
 					Nasabah: Nasabah{
-						CIF: cif,
-						NIK: nik,
-						Nama: nama,
+						CIF:          cif,
+						NIK:          nik,
+						Nama:         nama,
 						Tempat_Lahir: tempat_lahir,
-						Alamat: alamat,
-						No_Telp: no_telp,
+						Alamat:       alamat,
+						No_Telp:      no_telp,
 					},
 					NasabahDetail: NasabahDetail{
-						CIF: cif,
+						CIF:    cif,
 						No_Req: no_req,
-						Saldo: saldo,
+						Saldo:  saldo,
 					},
 				}
 
@@ -281,4 +285,106 @@ func (um UserModels) PrintNasabahInfoByCif(cif int) (NasabahInfo, error){
 		return nasabahInfo, nil
 	}
 }
+
 //=======================================================================================================================
+
+// find cif service ==========================================================================================
+func (um UserModels) FindNik(nik int) (Nasabah, error) {
+	rows, err := um.DB.Query("SELECT * FROM nasabah WHERE nik=?", nik)
+	fmt.Println(rows)
+	fmt.Println(nik)
+	if err != nil {
+		panic(err)
+	} else {
+		var nasabah Nasabah
+		for rows.Next() {
+			var cif int
+			var nik int
+			var nama string
+			var tempat_lahir string
+			var tanggal_lahir string
+			var alamat string
+			var no_telp string
+
+			err2 := rows.Scan(&cif, &nik, &nama, &tempat_lahir, &tanggal_lahir, &alamat, &no_telp)
+			if err2 != nil {
+				panic(err2)
+			}
+			nasabah = Nasabah{
+				CIF:           int(cif),
+				NIK:           int(nik),
+				Nama:          nama,
+				Tempat_Lahir:  tempat_lahir,
+				Tanggal_Lahir: tanggal_lahir,
+				Alamat:        alamat,
+				No_Telp:       no_telp,
+			}
+			fmt.Println("called")
+			fmt.Println(nasabah)
+		}
+		return nasabah, nil
+	}
+}
+
+// check nasabah exist or not ========================================================================
+func (um UserModels) FindLastInsertNoRek() (int, error) {
+	rows, err := um.DB.Query("SELECT  no_rekening FROM nasabah_detail ORDER BY  no_rekening DESC LIMIT 1")
+	if err != nil {
+		panic(err)
+	} else {
+		// looping data
+		var no_rekening int
+		for rows.Next() {
+
+			err2 := rows.Scan(&no_rekening)
+			if err2 != nil {
+				panic(err2)
+			}
+		}
+		return no_rekening, nil
+	}
+}
+
+// end find cif service ======================================================================================
+
+// Create Cif ================================================================================================
+func (um UserModels) BuatCIF(nasabah Nasabah) (Nasabah, error) {
+	rows, err := um.DB.Exec("insert into nasabah (nik,nama,tempat_lahir,tanggal_lahir,alamat,no_telp) values (?,?,?,?,?,?)",
+		nasabah.NIK, nasabah.Nama, nasabah.Tempat_Lahir, nasabah.Tanggal_Lahir, nasabah.Alamat, nasabah.No_Telp)
+	fmt.Println("nik", nasabah.NIK)
+	if err != nil {
+		panic(err)
+	} else {
+		status, _ := rows.RowsAffected()
+		if status > 0 {
+			result, err := um.FindNik(nasabah.NIK)
+			return result, err
+		} else {
+			return Nasabah{}, err
+		}
+	}
+}
+
+// ==========================================================================================================
+
+// buat rekening tabungan ===================================================================================
+func (um UserModels) BuatTabungan(cif, saldo int64) (NasabahInfo, error) {
+	last_no_rekening, _ := um.FindLastInsertNoRek()
+		last_no_rekening += 1
+
+	fmt.Println(last_no_rekening)
+	rows, err := um.DB.Exec("insert into nasabah_detail (cif,no_rekening,saldo) values (?,?,?)",
+		cif,last_no_rekening, saldo)
+	if err != nil {
+		panic(err)
+	}
+	status, _ := rows.RowsAffected()
+	if status > 0 {
+		// call method print nasabah by cif
+		result, _ := um.PrintNasabahInfoByCif(int(cif))
+		return result,nil
+	}else{
+		return NasabahInfo{},nil
+	}
+}
+// =======================================================================================================

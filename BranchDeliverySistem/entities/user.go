@@ -42,8 +42,8 @@ type Transaksi struct {
 
 type Overbooking struct {
 	 IdUser  int
-	NASABAH_DETAIL1 NasabahDetail
-	NASABAH_DETAIL2 NasabahDetail
+	Nasabah_Detail1 NasabahDetail
+	NAsabah_Detail2 NasabahDetail
 	Nominal string
 	Berita string
 }
