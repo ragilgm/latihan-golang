@@ -17,13 +17,13 @@ type server struct {
 }
 
 // method setor tunai server
-func (s *server) SetorTunai(ctx context.Context, transaksi *BranchDeliverySystem.TRANSAKSI) (*BranchDeliverySystem.TRANSAKSI, error) {
+func (s *server) SetorTunai(_ context.Context, transaksi *BranchDeliverySystem.TRANSAKSI) (*BranchDeliverySystem.TRANSAKSI, error) {
 	db, err := config.GetMysqlDB()
 	if err != nil {
 		panic(err)
 	} else {
 		con := services.UserModels{
-			db,
+			DB: db,
 		}
 		noreq := transaksi.GetNO_REKENING()
 		nominal := transaksi.GetNOMINAL()
@@ -33,7 +33,7 @@ func (s *server) SetorTunai(ctx context.Context, transaksi *BranchDeliverySystem
 		log.Printf(" client request : %v,%v,%v", noreq, nominal, berita)
 
 		// call method stor tunai for check no rek exist or not
-		userDetails, err := con.FindNoRek(int(noreq), int(nominal), berita)
+		userDetails, err := con.FindNoRek(int(noreq))
 		fmt.Println(userDetails)
 		if err != nil {
 			panic(err)
@@ -60,13 +60,13 @@ func (s *server) SetorTunai(ctx context.Context, transaksi *BranchDeliverySystem
 }
 
 // method tarik tunai server
-func (s *server) TarikTunai(ctx context.Context, transaksi *BranchDeliverySystem.TRANSAKSI) (*BranchDeliverySystem.TRANSAKSI, error) {
+func (s *server) TarikTunai(_ context.Context, transaksi *BranchDeliverySystem.TRANSAKSI) (*BranchDeliverySystem.TRANSAKSI, error) {
 	db, err := config.GetMysqlDB()
 	if err != nil {
 		panic(err)
 	} else {
 		con := services.UserModels{
-			db,
+			DB: db,
 		}
 		noreq := transaksi.GetNO_REKENING()
 		nominal := transaksi.GetNOMINAL()
@@ -76,7 +76,7 @@ func (s *server) TarikTunai(ctx context.Context, transaksi *BranchDeliverySystem
 		log.Printf(" client request : %v,%v,%v", noreq, nominal, berita)
 
 		// call method stor tunai for check no rek exist or not
-		userDetails, err := con.FindNoRek(int(noreq), int(nominal), berita)
+		userDetails, err := con.FindNoRek(int(noreq))
 		fmt.Println(userDetails)
 		if err != nil {
 			panic(err)
@@ -102,9 +102,98 @@ func (s *server) TarikTunai(ctx context.Context, transaksi *BranchDeliverySystem
 	return &BranchDeliverySystem.TRANSAKSI{}, nil
 }
 
+// method OverBooking server
+func (s *server) OverBooking(_ context.Context, overbooking *BranchDeliverySystem.OVERBOOKING) (*BranchDeliverySystem.OVERBOOKING, error) {
+	db, err := config.GetMysqlDB()
+	if err != nil {
+		panic(err)
+	} else {
+		con := services.UserModels{
+			DB: db,
+		}
+		rekAwal := overbooking.NasabahDetail1.GetNO_REKENING()
+		RekTujuan := overbooking.NasabahDetail2.GetNO_REKENING()
+		nominal := overbooking.GetNominal()
+
+		// respons server
+		log.Printf(" client request : %v,%v,%v", rekAwal, RekTujuan, nominal)
+
+		// call method stor tunai for check no rek exist or not
+		checkReqAwal, err := con.FindNoRek(int(rekAwal))
+		fmt.Println(checkReqAwal)
+		fmt.Println("called")
+		if err != nil {
+			panic(err)
+		} else {
+			fmt.Println("called")
+			checkReqTujuan, err := con.FindNoRek(int(RekTujuan))
+			fmt.Println(checkReqTujuan)
+			if err != nil {
+				panic(err)
+			} else {
+				fmt.Println("called")
+				over, err := con.Overbooking(int(overbooking.GetIdUser()),checkReqAwal,checkReqTujuan,int(overbooking.GetNominal()),overbooking.GetBERITA())
+				if err != nil {
+					panic(err)
+				}
+				fmt.Println(over)
+			}
+		}
+		return &BranchDeliverySystem.OVERBOOKING{
+			NasabahDetail1: &BranchDeliverySystem.NASABAH_DETAIL{
+				CIF:         int64(checkReqAwal.CIF),
+				NO_REKENING: int64(checkReqAwal.No_Req),
+				SALDO:       int64(checkReqAwal.Saldo) - overbooking.GetNominal(),
+			},
+			NasabahDetail2: &BranchDeliverySystem.NASABAH_DETAIL{
+				CIF:         int64(checkReqAwal.CIF),
+				NO_REKENING: int64(checkReqAwal.No_Req),
+				SALDO:       int64(checkReqAwal.Saldo) - overbooking.GetNominal(),
+			},
+		}, nil
+
+	}
+}
+
+// method cetak buku
+func (s *server) CetakBuku(_ context.Context, transaksi *BranchDeliverySystem.TRANSAKSI) (*BranchDeliverySystem.CETAKBUKU, error) {
+	db, err := config.GetMysqlDB()
+	var listTransaksi []*BranchDeliverySystem.TRANSAKSI
+	if err != nil {
+		panic(err)
+	} else {
+		con := services.UserModels{
+			db,
+		}
+		no_rek := transaksi.GetNO_REKENING()
+
+		users, err := con.CetakBuku(int(no_rek))
+		if err != nil {
+			panic(err)
+		}
+
+		for _, velue := range users {
+			trx := BranchDeliverySystem.TRANSAKSI{
+				ID: int64(velue.Id_Transaksi),
+				ID_USER: int64(velue.Id_User),
+				NO_REKENING: int64(velue.No_Rekening),
+				TANGGAL: velue.Tanggal,
+				NOMINAL: int64(velue.Nominal),
+				SALDO: int64(velue.Saldo),
+				JENIS_TRANSAKSI: velue.Jenis_Transaksi,
+				BERITA: velue.Berita,
+			}
+			listTransaksi = append(listTransaksi,&trx)
+			}
+		}
+	return &BranchDeliverySystem.CETAKBUKU{
+		TRANSAKSI: listTransaksi,
+	}, nil
+
+}
 
 // method login server
-func (s *server) LoginUser(ctx context.Context, user *BranchDeliverySystem.User) (*BranchDeliverySystem.User, error) {
+func (s *server) LoginUser(_ context.Context, user *BranchDeliverySystem.User) (*BranchDeliverySystem.User, error) {
 	db, err := config.GetMysqlDB()
 
 	if err != nil {

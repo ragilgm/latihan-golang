@@ -12,8 +12,8 @@ type UserModels struct {
 	DB *sql.DB
 }
 
-func (um UserModels) Login(id_user int, password string) (User, error) {
-	rows, err := um.DB.Query("SELECT * FROM users WHERE id_user=? AND PASSWORD LIKE ? ",id_user, "%"+password+"%")
+func (um UserModels) Login(idUser int, password string) (User, error) {
+	rows, err := um.DB.Query("SELECT * FROM users WHERE id_user=? AND PASSWORD LIKE ? ", idUser, "%"+password+"%")
 	if err != nil {
 		return User{}, err
 	} else {
@@ -38,7 +38,7 @@ func (um UserModels) Login(id_user int, password string) (User, error) {
 }
 
 // check nasabah exist or not
-func (um UserModels) FindNoRek(rekeningTujuan, nominal int, berita string) (NasabahDetail, error) {
+func (um UserModels) FindNoRek(rekeningTujuan int) (NasabahDetail, error) {
 	rows, err := um.DB.Query("SELECT * FROM nasabah_detail where no_req=?", rekeningTujuan)
 	if err != nil {
 		panic(err)
@@ -65,22 +65,20 @@ func (um UserModels) FindNoRek(rekeningTujuan, nominal int, berita string) (Nasa
 }
 
 // insert setor tunai to db
-func (um UserModels) SetorTunaiService(userId int,nasabah NasabahDetail,berita string,nominal int) (int, error) {
+func (um UserModels) SetorTunaiService(userId int, nasabah NasabahDetail, berita string, nominal int) (int, error) {
 	tanggal := time.Now().Format("2006-01-02 15:04:05")
 	saldo := nasabah.Saldo
+	jenisTransaksi := "st"
 	// check saldo overload
 	if saldo < nominal {
-		return 0,nil
-	}else {
+		return 0, nil
+	} else {
 		currentSaldo := nasabah.Saldo + nominal
 		rows, err := um.DB.Exec(
-			"insert into transaksi (id_user, no_req,tanggal,nominal,saldo,berita)value(?,?,?,?,?,?)",
-			userId,nasabah.No_Req,tanggal,nominal,currentSaldo,berita)
-		_,err = um.DB.Exec(
-			"update nasabah_detail set saldo = ? where no_req=?",currentSaldo,nasabah.No_Req)
-		if err != nil {
-			panic(err)
-		}
+			"insert into transaksi (id_user, no_req,tanggal,jenis_transaksi,nominal,saldo,berita)values(?,?,?,?,?,?,?)",
+			userId, nasabah.No_Req, tanggal, jenisTransaksi, nominal, currentSaldo, berita)
+		_, err = um.DB.Exec(
+			"update nasabah_detail set saldo = ? where no_req=?", currentSaldo, nasabah.No_Req)
 		if err != nil {
 			return 0, err
 		} else {
@@ -91,24 +89,20 @@ func (um UserModels) SetorTunaiService(userId int,nasabah NasabahDetail,berita s
 }
 
 // insert setor tunai to db
-func (um UserModels) TarikTunaiService(userId int,nasabah NasabahDetail,berita string,nominal int) (int, error) {
+func (um UserModels) TarikTunaiService(userId int, nasabah NasabahDetail, berita string, nominal int) (int, error) {
 	tanggal := time.Now().Format("2006-01-02 15:04:05")
 	saldo := nasabah.Saldo
-
+	jenisTransaksi := "tt"
 	// check saldo overload
 	if saldo < nominal {
-		return 0,nil
-	}else {
-		fmt.Println("called")
+		return 0, nil
+	} else {
 		currentSaldo := nasabah.Saldo - nominal
 		rows, err := um.DB.Exec(
-			"insert into transaksi (id_user, no_req,tanggal,nominal,saldo,berita)value(?,?,?,?,?,?)",
-			userId,nasabah.No_Req,tanggal,nominal,currentSaldo,berita)
-		_,err = um.DB.Exec(
-			"update nasabah_detail set saldo = ? where no_req=?",currentSaldo,nasabah.No_Req)
-		if err != nil {
-			panic(err)
-		}
+			"insert into transaksi (id_user, no_req,tanggal,jenis_transaksi,nominal,saldo,berita)value(?,?,?,?,?,?,?)",
+			userId, nasabah.No_Req, tanggal, jenisTransaksi, nominal, currentSaldo, berita)
+		_, err = um.DB.Exec(
+			"update nasabah_detail set saldo = ? where no_req=?", currentSaldo, nasabah.No_Req)
 		if err != nil {
 			return 0, err
 		} else {
@@ -118,6 +112,83 @@ func (um UserModels) TarikTunaiService(userId int,nasabah NasabahDetail,berita s
 	}
 }
 
+// insert Overbooking to db
+func (um UserModels) Overbooking(idUser int, rekeningAwal, rekeingTujuan NasabahDetail, nominal int, berita string) (int, error) {
+	tanggal := time.Now().Format("2006-01-02 15:04:05")
+	// check saldo overload
+	if rekeningAwal.Saldo < nominal {
+		return 0, nil
+	} else {
+		saldoRekAwal := int(rekeningAwal.Saldo - nominal)
+		fmt.Println(saldoRekAwal)
+		saldoRekTujuan := int(rekeingTujuan.Saldo + nominal)
+		fmt.Println(saldoRekTujuan)
+		jenisTransaksi := "pb"
+		insertRekUtama, err := um.DB.Exec(
+			"insert into transaksi (id_user, no_req,tanggal,jenis_transaksi,nominal,saldo,berita)values(?,?,?,?,?,?,?)",
+			idUser, rekeningAwal.No_Req, tanggal, jenisTransaksi, nominal, saldoRekAwal, berita)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(insertRekUtama)
+		update, err := um.DB.Exec("update nasabah_detail set saldo = ? where no_req=?", saldoRekAwal, rekeningAwal.No_Req)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(update)
+		insertRekKedua, err := um.DB.Exec("insert into transaksi (id_user, no_req,tanggal,jenis_transaksi,nominal,saldo,berita)values(?,?,?,?,?,?,?)",
+			idUser, rekeingTujuan.No_Req, tanggal, jenisTransaksi, nominal, saldoRekTujuan, berita)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(insertRekKedua)
+		updateRekTujuan, err := um.DB.Exec("update nasabah_detail set saldo = ? where no_req=?", saldoRekTujuan, rekeingTujuan.No_Req)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(updateRekTujuan)
+
+	}
+	return idUser, nil
+}
+
+func (um UserModels) CetakBuku(no_rekening int) ([]Transaksi, error) {
+	rows, err := um.DB.Query("SELECT * FROM transaksi WHERE no_req=?", no_rekening)
+	if err != nil {
+		return []Transaksi{}, err
+	} else {
+		var transaksi []Transaksi
+		for rows.Next() {
+			var id_transaksi int
+			var id_user int
+			var no_rek int
+			var tanggal string
+			var jenis_transaksi string
+			var nominal int
+			var saldo int
+			var berita string
+			err2 := rows.Scan(&id_transaksi, &id_user, &no_rek, &tanggal, &jenis_transaksi, &nominal, &saldo, &berita)
+			if err2 != nil {
+				return []Transaksi{}, err
+			} else {
+				trx := Transaksi{
+
+					Id_Transaksi: id_transaksi,
+					Id_User: id_user, No_Rekening: no_rek,
+					Tanggal: tanggal,
+					Jenis_Transaksi: jenis_transaksi,
+					Nominal: nominal,
+					Saldo: saldo,
+					Berita: berita,
+				}
+				transaksi = append(transaksi,trx)
+			}
+		}
+		return transaksi, nil
+	}
+}
+
+//SELECT * FROM nasabah INNER JOIN nasabah_detail ON nasabah.cif = nasabah_detail.cif WHERE no_req =
 
 //rows, err := um.DB.Query("SELECT * FROM nasabah_detail")
 
@@ -159,34 +230,6 @@ func (um UserModels) TarikTunaiService(userId int,nasabah NasabahDetail,berita s
 //	}
 //}
 //}
-
-//
-//func (um UserModels) FindALL() ([]entities.User, error) {
-//	rows, err := um.DB.Query("select * from user")
-//	if err != nil {
-//		return nil, err
-//	} else {
-//		var users []entities.User
-//		for rows.Next() {
-//			var id int
-//			var firstname string
-//			var lastname string
-//
-//			err2 := rows.Scan(&id, &firstname, &lastname)
-//			if err2 != nil {
-//				return nil, err2
-//			} else {
-//				user := entities.User{
-//					ID: id, FIRSTNAME: firstname, LASTNAME: lastname,
-//				}
-//				users = append(users, user)
-//			}
-//		}
-//		return users, nil
-//	}
-//}
-//
-//
 
 //
 //func (um UserModels) Update(user *entities.User) (int64, error) {

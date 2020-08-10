@@ -18,20 +18,21 @@ const (
 //
 
 func main() {
-
+	//_,id,_ := Login(1, "maulana")
 	//check := SetorTunai(4444,1000,"kdfkdsmfk",1)
 	//fmt.Print(check)
-
-
-	check := TarikTunai(4444,100000,"kdfkdsmfk",1)
-	fmt.Print(check)
+	//over,check := Overbooking(1,4444,5555,100000,"test")
+	//fmt.Println(over)
+	//fmt.Println(check)
+	//check := TarikTunai(4444, 100000, "kdfkdsmfk", 1)
+	//fmt.Print(check)
 	//checkLogin,cabang,role := Login("ragil", "maulana")
+	CetakBuku(4444)
 	//fmt.Println(checkLogin)
 	//fmt.Println(cabang)
 	//fmt.Println(role)
 
 }
-
 
 //stor tunai client
 //====================================================================================================
@@ -47,25 +48,25 @@ func SetorTunai(no_req, nominal int, berita string, id_User int) bool {
 	defer cancel()
 
 	c := BranchDeliverySystem.NewAddClient(conn)
-// call method setor tunai
-	respons , err := c.SetorTunai(ctx,
+	// call method setor tunai
+	respons, err := c.SetorTunai(ctx,
 		&BranchDeliverySystem.TRANSAKSI{
-		NO_REKENING: int64(no_req),
-		NOMINAL: int64(nominal),
-		BERITA: berita,
-		ID: int64(id_User),
+			NO_REKENING: int64(no_req),
+			NOMINAL:     int64(nominal),
+			BERITA:      berita,
+			ID:          int64(id_User),
 		})
 
 	if respons != nil {
 		fmt.Println(respons)
 		return true
-	}else {
+	} else {
 		return false
 	}
 
 }
-//====================================================================================================
 
+//====================================================================================================
 
 //tarik tunai client
 //====================================================================================================
@@ -82,23 +83,91 @@ func TarikTunai(no_req, nominal int, berita string, idUser int) bool {
 
 	c := BranchDeliverySystem.NewAddClient(conn)
 	// call method setor tunai
-	respons , err := c.TarikTunai(ctx,
+	respons, err := c.TarikTunai(ctx,
 		&BranchDeliverySystem.TRANSAKSI{
 			NO_REKENING: int64(no_req),
-			NOMINAL: int64(nominal),
-			BERITA: berita,
-			ID: int64(idUser),
+			NOMINAL:     int64(nominal),
+			BERITA:      berita,
+			ID:          int64(idUser),
 		})
 
 	if respons != nil {
 		fmt.Println(respons)
 		return true
-	}else {
+	} else {
 		return false
 	}
 
 }
+
 //====================================================================================================
+
+//Cetak Buku client
+//====================================================================================================
+func CetakBuku(no_rekening int64) (*BranchDeliverySystem.CETAKBUKU, bool) {
+	// Set up a connection to the server.
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	c := BranchDeliverySystem.NewAddClient(conn)
+	// call method setor tunai
+	respons, err := c.CetakBuku(ctx,&BranchDeliverySystem.TRANSAKSI{NO_REKENING: no_rekening})
+	if respons != nil {
+		fmt.Println(respons)
+		return respons,true
+	} else {
+		return respons,false
+	}
+}
+//====================================================================================================
+
+//overbooking client
+//====================================================================================================
+func Overbooking(id_User int, norekAsal, noRekTujuan, nominal int64, berita string) (*BranchDeliverySystem.OVERBOOKING, bool) {
+	// Set up a connection to the server.
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	c := BranchDeliverySystem.NewAddClient(conn)
+	// call method setor tunai
+	respons, err := c.OverBooking(ctx,
+		&BranchDeliverySystem.OVERBOOKING{
+			IdUser: int64(id_User),
+			NasabahDetail1: &BranchDeliverySystem.NASABAH_DETAIL{
+				NO_REKENING: norekAsal,
+			},
+			NasabahDetail2: &BranchDeliverySystem.NASABAH_DETAIL{
+				NO_REKENING: noRekTujuan,
+			},
+			Nominal: nominal,
+			BERITA:  berita,
+		},
+	)
+
+	if respons != nil {
+		fmt.Println(respons)
+		return respons,true
+	} else {
+		return respons,false
+	}
+}
+
+//====================================================================================================
+
+// login
+//=====================================================================================================
 
 func Login(id_user int, password string) (bool, string, string) {
 
@@ -136,3 +205,4 @@ func Login(id_user int, password string) (bool, string, string) {
 		return false, cabang, masuk.GetROLE()
 	}
 }
+//=====================================================================================================

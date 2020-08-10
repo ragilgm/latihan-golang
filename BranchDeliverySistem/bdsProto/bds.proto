@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package BranchDeliverySystem;
 
-message Empty{}
-
 message User {
   int64 ID_USER = 1;
   string NAMA = 2;
@@ -26,6 +24,7 @@ message NASABAH_DETAIL {
   int64 CIF = 1;
   int64 NO_REKENING = 2;
   int64 SALDO = 3;
+
 }
 
 message TRANSAKSI {
@@ -39,17 +38,25 @@ message TRANSAKSI {
   string BERITA = 8;
 }
 
-//message SetorTunai{
+message OVERBOOKING {
+  int64 IdUser = 1;
+ NASABAH_DETAIL NasabahDetail1 = 2;
+ NASABAH_DETAIL NasabahDetail2 = 3;
+ int64 Nominal = 4;
+ string BERITA = 5;
+}
 
-//}
-//
-////message Users {
-////  repeated User user = 1;
-////}
+message CETAKBUKU {
+  repeated TRANSAKSI TRANSAKSI= 1;
+}
+
+message EMPTY {
+}
 
 service Add {
   rpc LoginUser (User) returns (User);
   rpc SetorTunai(TRANSAKSI) returns (TRANSAKSI);
   rpc TarikTunai(TRANSAKSI) returns (TRANSAKSI);
-  rpc OverBooking(TRANSAKSI) returns (TRANSAKSI);
+  rpc OverBooking(OVERBOOKING) returns (OVERBOOKING);
+  rpc CetakBuku(TRANSAKSI) returns (CETAKBUKU);
 }

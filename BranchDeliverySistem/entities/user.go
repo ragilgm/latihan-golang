@@ -25,12 +25,20 @@ type NasabahDetail struct {
 }
 
 type Transaksi struct {
-	id_transaksi    int
-	id_user         int
-	no_rekening     int
-	tanggal         string
-	jenis_transaksi string
-	nominal         int
-	saldo           int
-	berita          string
+	Id_Transaksi    int
+	Id_User         int
+	No_Rekening     int
+	Tanggal         string
+	Jenis_Transaksi string
+	Nominal         int
+	Saldo           int
+	Berita          string
+}
+
+type Overbooking struct {
+	 IdUser  int
+	NASABAH_DETAIL1 NasabahDetail
+	NASABAH_DETAIL2 NasabahDetail
+	Nominal string
+	Berita string
 }
