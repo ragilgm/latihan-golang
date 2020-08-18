@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d178cf7c-8eec-4ff7-9783-5d26bad3fd23" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../BDSWeb/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../BDSWeb/curl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Latihan/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Latihan/.idea/Latihan.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Latihan/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Latihan/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Latihan/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Latihan/Absensi/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Latihan/Absensi/.idea/Absensi.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Latihan/Absensi/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Latihan/Absensi/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Latihan/Absensi/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Latihan/Absensi/config/Database.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Latihan/Absensi/proto/Mahasiswa.pb.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Latihan/Absensi/proto/Mahasiswa.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Latihan/Absensi/service/MahasiswaService.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Latihan/protoSintax" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo-framework/config/database.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo-framework/controller/controller.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo-framework/main/main.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo-framework/middleware/middleware.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo-framework/router/user_route.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo-framework/service/user_service.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo-framework/sessions/sessions.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo-framework/views/index.tpl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo-framework/views/layouts/footer.tpl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo-framework/views/layouts/head.tpl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo-framework/views/layouts/master.tpl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo-framework/views/page.tpl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo-framework/views/partials/ad.tpl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo/echo2.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo/main.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo/test/controller/user_controller.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo/test/main.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo/test/models/user_models.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo/test/route/index.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../echo/test/route/user_route.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../goroutine/goroutine.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../testAPI/entities/city/city.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../testAPI/entities/provinsi/provinsi.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../testAPI/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BranchDeliverySistem/server/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../BranchDeliverySistem/server/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Latihan/goMysql/entities/user.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Latihan/goMysql/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../Latihan/goMysql/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Latihan/goMysql/models/user_models.go" beforeDir="false" afterPath="$PROJECT_DIR$/../Latihan/goMysql/models/user_models.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Latihan/goMysql/protoUser/user.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/../Latihan/goMysql/protoUser/user.pb.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Latihan/goMysql/server/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../Latihan/goMysql/server/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Latihan/grpcAPI/client/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../Latihan/grpcAPI/client/main.go" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1gCZHaMReO1HVMqzBPk4WK1RDUT" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d178cf7c-8eec-4ff7-9783-5d26bad3fd23" name="Default Changelist" comment="" />
+      <created>1597620447499</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1597620447499</updated>
+    </task>
+    <servers />
+  </component>
+</project>

@@ -3,19 +3,19 @@ package models
 import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/ragilmaulana/Latihan/goMysql/entities"
+	UserService "github.com/ragilmaulana/restapi/tugas-golang/Latihan/goMysql/protoUser"
 )
 
 type UserModels struct {
 	DB *sql.DB
 }
 
-func (um UserModels) FindALL() ([]entities.User, error) {
+func (um UserModels) FindALL() ([]UserService.User, error) {
 	rows, err := um.DB.Query("select * from user")
 	if err != nil {
-		return nil, err
+		panic(err)
 	} else {
-		var users []entities.User
+		var users []UserService.User
 		for rows.Next() {
 			var id int
 			var firstname string
@@ -23,10 +23,12 @@ func (um UserModels) FindALL() ([]entities.User, error) {
 
 			err2 := rows.Scan(&id, &firstname, &lastname)
 			if err2 != nil {
-				return nil, err2
+				panic(err2)
 			} else {
-				user := entities.User{
-					ID: id, FIRSTNAME: firstname, LASTNAME: lastname,
+				user := UserService.User{
+					ID: int64(id),
+					FIRSTNAME: firstname,
+					LASTNAME: lastname,
 				}
 				users = append(users, user)
 			}
@@ -35,12 +37,12 @@ func (um UserModels) FindALL() ([]entities.User, error) {
 	}
 }
 
-func (um UserModels) FIndById(id int) (entities.User, error) {
+func (um UserModels) FIndById(id int) (UserService.User, error) {
 	rows, err := um.DB.Query("select * from user where id=?", id)
 	if err != nil {
-		return entities.User{}, err
+		panic(err)
 	} else {
-		var user entities.User
+		var user UserService.User
 		for rows.Next() {
 			var id int
 			var firstname string
@@ -48,10 +50,12 @@ func (um UserModels) FIndById(id int) (entities.User, error) {
 
 			err2 := rows.Scan(&id, &firstname, &lastname)
 			if err2 != nil {
-				return entities.User{}, err
+				panic(err)
 			} else {
-				user = entities.User{
-					ID: id, FIRSTNAME: firstname, LASTNAME: lastname,
+				user = UserService.User{
+					ID: int64(id),
+					FIRSTNAME: firstname,
+					LASTNAME: lastname,
 				}
 			}
 		}
@@ -59,7 +63,7 @@ func (um UserModels) FIndById(id int) (entities.User, error) {
 	}
 }
 
-func (um UserModels) Insert(user *entities.User) (int64, error) {
+func (um UserModels) Insert(user *UserService.User) (int64, error) {
 	rows, err := um.DB.Exec("insert into user (firstName,lastName) values (?,?)", user.FIRSTNAME, user.LASTNAME)
 	if err != nil {
 		return 0, err
@@ -70,7 +74,7 @@ func (um UserModels) Insert(user *entities.User) (int64, error) {
 
 }
 
-func (um UserModels) Update(user *entities.User) (int64, error) {
+func (um UserModels) Update(user *UserService.User) (int64, error) {
 	rows, err := um.DB.Exec("update user set firstName = ?, lastName = ? where id=?", user.FIRSTNAME, user.LASTNAME,user.ID)
 	if err != nil {
 		return 0, err

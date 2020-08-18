@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/ragilmaulana/Latihan/goMysql/config"
-	"github.com/ragilmaulana/Latihan/goMysql/entities"
 	"github.com/ragilmaulana/Latihan/goMysql/models"
 	UserService "github.com/ragilmaulana/Latihan/goMysql/protoUser"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"net"

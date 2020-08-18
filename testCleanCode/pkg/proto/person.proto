@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package protoPerson;
+
+option go_package = ".;protoPerson";
+
+message PersonRequest{
+int64 id_user = 1;
+string FirstName = 2;
+string LastName = 3;
+}
+
+message PersonRespond{
+  int64 id_user = 1;
+  string FirstName = 2;
+  string LastName = 3;
+}
+
+service PersonService {
+rpc PrintPerson(PersonRequest) returns (PersonRespond);
+}

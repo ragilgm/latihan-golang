@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package MahasiswaProto;
+
+message Empty{
+  bool Status = 1;
+}
+
+message User {
+  int64 Id = 1;
+  string Firstname = 2;
+  string Lastname = 3;
+}
+
+message Users {
+  repeated User user = 1;
+}
+
+service Add {
+  rpc InsertData(User) returns (User);
+  rpc EditData(User) returns (User);
+  rpc FindID(User) returns (User);
+  rpc FindAll(Empty) returns (Users);
+}

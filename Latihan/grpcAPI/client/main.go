@@ -2,9 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	testProto "github.com/ragilmaulana/Latihan/grpcAPI/proto"
-	"google.golang.org/grpc"
+	testProto "github.com/ragilmaulana/restapi/tugas-golang/Latihan/grpcAPI/proto"
 	"log"
 	"net/http"
 	"strconv"

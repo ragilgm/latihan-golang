@@ -331,39 +331,39 @@ func (s *server) BuatTabungan(_ context.Context, nasabah *BranchDeliverySystem.N
 			CIF:         int64(n.NasabahDetail.CIF),
 			NO_REKENING: int64(n.NasabahDetail.No_Req),
 			SALDO:       int64(n.NasabahDetail.Saldo),
-		},
-	}, nil
-}
-//=============== end of buat ===================================================================================================
+		},func (s *server) LoginUser(_ context.Context, user *BranchDeliverySystem.User) (*BranchDeliverySystem.User, error) {
+		db, err := config.GetMysqlDB()
 
-// method login server ==============================================================================================================
-func (s *server) LoginUser(_ context.Context, user *BranchDeliverySystem.User) (*BranchDeliverySystem.User, error) {
-	db, err := config.GetMysqlDB()
-
-	if err != nil {
+		if err != nil {
 		panic(err)
 	} else {
 		con := services.UserModels{
-			db,
-		}
+		db,
+	}
 		id_user := user.GetID_USER()
 		password := user.GetPASSWORD()
 
 		users, err := con.Login(int(id_user), password)
 		if err != nil {
-			panic(err)
-		}
+		panic(err)
+	}
 		fmt.Println(users)
 		u := BranchDeliverySystem.User{
-			ID_USER:  int64(users.Id_user),
-			NAMA:     users.Nama,
-			PASSWORD: users.Password,
-			CABANG:   users.Cabang,
-			ROLE:     users.Role,
-		}
+		ID_USER:  int64(users.Id_user),
+		NAMA:     users.Nama,
+		PASSWORD: users.Password,
+		CABANG:   users.Cabang,
+		ROLE:     users.Role,
+	}
 		return &u, nil
 	}
+	}
+	}, nil
 }
+//=============== end of buat ===================================================================================================
+
+// method login server ==============================================================================================================
+
 // end of login user ==============================================================================================================
 func main() {
 	const (
