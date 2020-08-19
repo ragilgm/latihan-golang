@@ -5,17 +5,31 @@ package protoPerson;
 option go_package = ".;protoPerson";
 
 message PersonRequest{
-int64 id_user = 1;
-string FirstName = 2;
-string LastName = 3;
-}
-
-message PersonRespond{
   int64 id_user = 1;
   string FirstName = 2;
   string LastName = 3;
 }
 
+message PersonResponse{
+  int64 id_user = 1;
+  string FirstName = 2;
+  string LastName = 3;
+}
+
+message AllResopons{
+  repeated PersonResponse PersonResponse = 1;
+}
+
+message Empty{}
+
+message Message{
+  string Message = 1;
+}
+
 service PersonService {
-rpc PrintPerson(PersonRequest) returns (PersonRespond);
+  rpc PrintPerson(Empty) returns (AllResopons);
+  rpc AddPerson(PersonRequest)returns (Message);
+  rpc DeletePerson(PersonRequest)returns(Message);
+  rpc EditPersonById(PersonRequest)returns(PersonResponse);
+  rpc EditPersonByName(PersonRequest)returns(PersonResponse);
 }

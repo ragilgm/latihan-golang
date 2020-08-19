@@ -1,15 +1,22 @@
 package builder
 
-import "github.com/ragilmaulana/Latihan/clean/pkg/usecase"
+import (
+	"fmt"
+	"github.com/mitchellh/mapstructure"
+	"github.com/ragilmaulana/Latihan/clean/pkg/domain"
+)
 
-type PersonBuilder struct {}
+type PersonBuilder struct{}
 
-func GetPrintPerson(in interface{}) (interface{}, error) {
-	data := in.(*usecase.PersonRequest)
-	out := &usecase.PersonRespond{
-		Id_user:   data.Id_user,
-		FirstName: data.FirstName,
-		LastName:  data.LastName,
+func (*PersonBuilder) GetPrintPerson(in interface{}) interface{} {
+	req := in.(*[]domain.Person)
+
+	var out *[]domain.Person
+
+	err1 := mapstructure.Decode(req, &out)
+
+	if err1 != nil {
+		fmt.Println("data tidak valid atau tidak sama (builder)")
 	}
-	return out, nil
+	return out
 }

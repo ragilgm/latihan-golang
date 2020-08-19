@@ -2,8 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/mitchellh/mapstructure"
-	"github.com/ragilmaulana/Latihan/clean/pkg/entity"
+	"github.com/ragilmaulana/Latihan/clean/pkg/domain"
 	person "github.com/ragilmaulana/Latihan/clean/pkg/proto"
 	"github.com/ragilmaulana/Latihan/clean/pkg/usecase"
 	"google.golang.org/grpc"
@@ -11,29 +12,80 @@ import (
 	"net"
 )
 
-type PersonService struct {
-	res usecase.PersonUsecase
+type server struct {
+	input usecase.PersonUsecase
 }
 
-func (s PersonService) PrintPerson(_ context.Context, user *person.PersonRequest) (*person.PersonRespond, error) {
-	req := entity.Person{
-		Id_User:   user.GetIdUser(),
-		FirstName: user.GetFirstName(),
-		LastName:  user.GetLastName(),
+func NewPersonService(a usecase.PersonUsecase) *server {
+	return &server{
+		input: a,
 	}
+}
 
-	res, err := s.res.PrintPerson(req)
+func (s server) PrintPerson(ctx context.Context, empty *person.Empty) (*person.AllResopons, error) {
+	res, err := s.input.PrintPerson()
 	if err != nil {
 		panic(err)
 	}
 
-	var out *person.PersonRespond
-
+	var out []*person.PersonResponse
 	err1 := mapstructure.Decode(res, &out)
 	if err1 != nil {
-		return nil,err1
+		return nil, err1
 	}
-	return out, nil
+	fmt.Println(out)
+	return &person.AllResopons{
+		PersonResponse: out,
+	}, nil
+}
+
+func (s server) AddPerson(ctx context.Context, request *person.PersonRequest) (*person.Message, error) {
+	req := &domain.Person{
+		Id_User:   request.GetIdUser(),
+		FirstName: request.GetFirstName(),
+		LastName:  request.GetLastName(),
+	}
+	respond, err := s.input.AddPerson(req)
+	if err != nil {
+		panic(err)
+	}
+	if respond != 1 {
+		return &person.Message{
+			Message: "data gagal ditambahkan",
+		}, nil
+	} else {
+		return &person.Message{
+			Message: "data berhasil di tambahkan",
+		}, nil
+	}
+}
+
+func (s server) DeletePerson(ctx context.Context, request *person.PersonRequest) (*person.Message, error) {
+	req := &domain.Person{
+		Id_User: request.GetIdUser(),
+	}
+	responds, err := s.input.DeletePerson(req)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(responds)
+	if responds != 1 {
+		return &person.Message{
+			Message: "data gagal dihapus",
+		}, nil
+	} else {
+		return &person.Message{
+			Message: "data berhasil di hapus",
+		}, nil
+	}
+}
+
+func (s server) EditPersonById(ctx context.Context, request *person.PersonRequest) (*person.PersonResponse, error) {
+	panic("implement me")
+}
+
+func (s server) EditPersonByName(ctx context.Context, request *person.PersonRequest) (*person.PersonResponse, error) {
+	panic("implement me")
 }
 
 func main() {
@@ -46,7 +98,7 @@ func main() {
 	}
 	log.Println("server starting in port 1010")
 	s := grpc.NewServer()
-	person.RegisterPersonServiceServer(s, &PersonService{})
+	person.RegisterPersonServiceServer(s, &server{})
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

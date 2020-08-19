@@ -92,7 +92,7 @@ func (x *PersonRequest) GetLastName() string {
 	return ""
 }
 
-type PersonRespond struct {
+type PersonResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -102,8 +102,8 @@ type PersonRespond struct {
 	LastName  string `protobuf:"bytes,3,opt,name=LastName,proto3" json:"LastName,omitempty"`
 }
 
-func (x *PersonRespond) Reset() {
-	*x = PersonRespond{}
+func (x *PersonResponse) Reset() {
+	*x = PersonResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_person_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -111,13 +111,13 @@ func (x *PersonRespond) Reset() {
 	}
 }
 
-func (x *PersonRespond) String() string {
+func (x *PersonResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PersonRespond) ProtoMessage() {}
+func (*PersonResponse) ProtoMessage() {}
 
-func (x *PersonRespond) ProtoReflect() protoreflect.Message {
+func (x *PersonResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_person_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -129,28 +129,160 @@ func (x *PersonRespond) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PersonRespond.ProtoReflect.Descriptor instead.
-func (*PersonRespond) Descriptor() ([]byte, []int) {
+// Deprecated: Use PersonResponse.ProtoReflect.Descriptor instead.
+func (*PersonResponse) Descriptor() ([]byte, []int) {
 	return file_person_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *PersonRespond) GetIdUser() int64 {
+func (x *PersonResponse) GetIdUser() int64 {
 	if x != nil {
 		return x.IdUser
 	}
 	return 0
 }
 
-func (x *PersonRespond) GetFirstName() string {
+func (x *PersonResponse) GetFirstName() string {
 	if x != nil {
 		return x.FirstName
 	}
 	return ""
 }
 
-func (x *PersonRespond) GetLastName() string {
+func (x *PersonResponse) GetLastName() string {
 	if x != nil {
 		return x.LastName
+	}
+	return ""
+}
+
+type AllResopons struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	PersonResponse []*PersonResponse `protobuf:"bytes,1,rep,name=PersonResponse,proto3" json:"PersonResponse,omitempty"`
+}
+
+func (x *AllResopons) Reset() {
+	*x = AllResopons{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_person_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AllResopons) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AllResopons) ProtoMessage() {}
+
+func (x *AllResopons) ProtoReflect() protoreflect.Message {
+	mi := &file_person_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AllResopons.ProtoReflect.Descriptor instead.
+func (*AllResopons) Descriptor() ([]byte, []int) {
+	return file_person_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *AllResopons) GetPersonResponse() []*PersonResponse {
+	if x != nil {
+		return x.PersonResponse
+	}
+	return nil
+}
+
+type Empty struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *Empty) Reset() {
+	*x = Empty{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_person_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Empty) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Empty) ProtoMessage() {}
+
+func (x *Empty) ProtoReflect() protoreflect.Message {
+	mi := &file_person_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Empty.ProtoReflect.Descriptor instead.
+func (*Empty) Descriptor() ([]byte, []int) {
+	return file_person_proto_rawDescGZIP(), []int{3}
+}
+
+type Message struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Message string `protobuf:"bytes,1,opt,name=Message,proto3" json:"Message,omitempty"`
+}
+
+func (x *Message) Reset() {
+	*x = Message{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_person_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Message) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Message) ProtoMessage() {}
+
+func (x *Message) ProtoReflect() protoreflect.Message {
+	mi := &file_person_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Message.ProtoReflect.Descriptor instead.
+func (*Message) Descriptor() ([]byte, []int) {
+	return file_person_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *Message) GetMessage() string {
+	if x != nil {
+		return x.Message
 	}
 	return ""
 }
@@ -166,20 +298,45 @@ var file_person_proto_rawDesc = []byte{
 	0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x46, 0x69, 0x72, 0x73, 0x74, 0x4e,
 	0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x4c, 0x61, 0x73, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x18,
 	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x4c, 0x61, 0x73, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x22,
-	0x62, 0x0a, 0x0d, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x64,
-	0x12, 0x17, 0x0a, 0x07, 0x69, 0x64, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x03, 0x52, 0x06, 0x69, 0x64, 0x55, 0x73, 0x65, 0x72, 0x12, 0x1c, 0x0a, 0x09, 0x46, 0x69, 0x72,
-	0x73, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x46, 0x69,
-	0x72, 0x73, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x4c, 0x61, 0x73, 0x74, 0x4e,
-	0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x4c, 0x61, 0x73, 0x74, 0x4e,
-	0x61, 0x6d, 0x65, 0x32, 0x56, 0x0a, 0x0d, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x12, 0x45, 0x0a, 0x0b, 0x50, 0x72, 0x69, 0x6e, 0x74, 0x50, 0x65, 0x72,
-	0x73, 0x6f, 0x6e, 0x12, 0x1a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x65, 0x72, 0x73, 0x6f,
-	0x6e, 0x2e, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x1a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x2e, 0x50, 0x65,
-	0x72, 0x73, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x64, 0x42, 0x0f, 0x5a, 0x0d, 0x2e,
-	0x3b, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x63, 0x0a, 0x0e, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x17, 0x0a, 0x07, 0x69, 0x64, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x03, 0x52, 0x06, 0x69, 0x64, 0x55, 0x73, 0x65, 0x72, 0x12, 0x1c, 0x0a, 0x09, 0x46, 0x69,
+	0x72, 0x73, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x46,
+	0x69, 0x72, 0x73, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x4c, 0x61, 0x73, 0x74,
+	0x4e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x4c, 0x61, 0x73, 0x74,
+	0x4e, 0x61, 0x6d, 0x65, 0x22, 0x52, 0x0a, 0x0b, 0x41, 0x6c, 0x6c, 0x52, 0x65, 0x73, 0x6f, 0x70,
+	0x6f, 0x6e, 0x73, 0x12, 0x43, 0x0a, 0x0e, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x2e, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52, 0x0e, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x07, 0x0a, 0x05, 0x45, 0x6d, 0x70, 0x74,
+	0x79, 0x22, 0x23, 0x0a, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x18, 0x0a, 0x07,
+	0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x4d,
+	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x32, 0xe5, 0x02, 0x0a, 0x0d, 0x50, 0x65, 0x72, 0x73, 0x6f,
+	0x6e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x3b, 0x0a, 0x0b, 0x50, 0x72, 0x69, 0x6e,
+	0x74, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x12, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x50,
+	0x65, 0x72, 0x73, 0x6f, 0x6e, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x1a, 0x18, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x2e, 0x41, 0x6c, 0x6c, 0x52, 0x65, 0x73,
+	0x6f, 0x70, 0x6f, 0x6e, 0x73, 0x12, 0x3d, 0x0a, 0x09, 0x41, 0x64, 0x64, 0x50, 0x65, 0x72, 0x73,
+	0x6f, 0x6e, 0x12, 0x1a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e,
+	0x2e, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x14,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x2e, 0x4d, 0x65, 0x73,
+	0x73, 0x61, 0x67, 0x65, 0x12, 0x40, 0x0a, 0x0c, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x65,
+	0x72, 0x73, 0x6f, 0x6e, 0x12, 0x1a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x65, 0x72, 0x73,
+	0x6f, 0x6e, 0x2e, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x14, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x2e, 0x4d,
+	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x49, 0x0a, 0x0e, 0x45, 0x64, 0x69, 0x74, 0x50, 0x65,
+	0x72, 0x73, 0x6f, 0x6e, 0x42, 0x79, 0x49, 0x64, 0x12, 0x1a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x2e, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x65, 0x72, 0x73,
+	0x6f, 0x6e, 0x2e, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x4b, 0x0a, 0x10, 0x45, 0x64, 0x69, 0x74, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x42,
+	0x79, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x65, 0x72,
+	0x73, 0x6f, 0x6e, 0x2e, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x1b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x2e,
+	0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x0f,
+	0x5a, 0x0d, 0x2e, 0x3b, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -194,19 +351,31 @@ func file_person_proto_rawDescGZIP() []byte {
 	return file_person_proto_rawDescData
 }
 
-var file_person_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_person_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_person_proto_goTypes = []interface{}{
-	(*PersonRequest)(nil), // 0: protoPerson.PersonRequest
-	(*PersonRespond)(nil), // 1: protoPerson.PersonRespond
+	(*PersonRequest)(nil),  // 0: protoPerson.PersonRequest
+	(*PersonResponse)(nil), // 1: protoPerson.PersonResponse
+	(*AllResopons)(nil),    // 2: protoPerson.AllResopons
+	(*Empty)(nil),          // 3: protoPerson.Empty
+	(*Message)(nil),        // 4: protoPerson.Message
 }
 var file_person_proto_depIdxs = []int32{
-	0, // 0: protoPerson.PersonService.PrintPerson:input_type -> protoPerson.PersonRequest
-	1, // 1: protoPerson.PersonService.PrintPerson:output_type -> protoPerson.PersonRespond
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	1, // 0: protoPerson.AllResopons.PersonResponse:type_name -> protoPerson.PersonResponse
+	3, // 1: protoPerson.PersonService.PrintPerson:input_type -> protoPerson.Empty
+	0, // 2: protoPerson.PersonService.AddPerson:input_type -> protoPerson.PersonRequest
+	0, // 3: protoPerson.PersonService.DeletePerson:input_type -> protoPerson.PersonRequest
+	0, // 4: protoPerson.PersonService.EditPersonById:input_type -> protoPerson.PersonRequest
+	0, // 5: protoPerson.PersonService.EditPersonByName:input_type -> protoPerson.PersonRequest
+	2, // 6: protoPerson.PersonService.PrintPerson:output_type -> protoPerson.AllResopons
+	4, // 7: protoPerson.PersonService.AddPerson:output_type -> protoPerson.Message
+	4, // 8: protoPerson.PersonService.DeletePerson:output_type -> protoPerson.Message
+	1, // 9: protoPerson.PersonService.EditPersonById:output_type -> protoPerson.PersonResponse
+	1, // 10: protoPerson.PersonService.EditPersonByName:output_type -> protoPerson.PersonResponse
+	6, // [6:11] is the sub-list for method output_type
+	1, // [1:6] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_person_proto_init() }
@@ -228,7 +397,43 @@ func file_person_proto_init() {
 			}
 		}
 		file_person_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PersonRespond); i {
+			switch v := v.(*PersonResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_person_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AllResopons); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_person_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Empty); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_person_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Message); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -246,7 +451,7 @@ func file_person_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_person_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -272,7 +477,11 @@ const _ = grpc.SupportPackageIsVersion6
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type PersonServiceClient interface {
-	PrintPerson(ctx context.Context, in *PersonRequest, opts ...grpc.CallOption) (*PersonRespond, error)
+	PrintPerson(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*AllResopons, error)
+	AddPerson(ctx context.Context, in *PersonRequest, opts ...grpc.CallOption) (*Message, error)
+	DeletePerson(ctx context.Context, in *PersonRequest, opts ...grpc.CallOption) (*Message, error)
+	EditPersonById(ctx context.Context, in *PersonRequest, opts ...grpc.CallOption) (*PersonResponse, error)
+	EditPersonByName(ctx context.Context, in *PersonRequest, opts ...grpc.CallOption) (*PersonResponse, error)
 }
 
 type personServiceClient struct {
@@ -283,9 +492,45 @@ func NewPersonServiceClient(cc grpc.ClientConnInterface) PersonServiceClient {
 	return &personServiceClient{cc}
 }
 
-func (c *personServiceClient) PrintPerson(ctx context.Context, in *PersonRequest, opts ...grpc.CallOption) (*PersonRespond, error) {
-	out := new(PersonRespond)
+func (c *personServiceClient) PrintPerson(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*AllResopons, error) {
+	out := new(AllResopons)
 	err := c.cc.Invoke(ctx, "/protoPerson.PersonService/PrintPerson", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *personServiceClient) AddPerson(ctx context.Context, in *PersonRequest, opts ...grpc.CallOption) (*Message, error) {
+	out := new(Message)
+	err := c.cc.Invoke(ctx, "/protoPerson.PersonService/AddPerson", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *personServiceClient) DeletePerson(ctx context.Context, in *PersonRequest, opts ...grpc.CallOption) (*Message, error) {
+	out := new(Message)
+	err := c.cc.Invoke(ctx, "/protoPerson.PersonService/DeletePerson", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *personServiceClient) EditPersonById(ctx context.Context, in *PersonRequest, opts ...grpc.CallOption) (*PersonResponse, error) {
+	out := new(PersonResponse)
+	err := c.cc.Invoke(ctx, "/protoPerson.PersonService/EditPersonById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *personServiceClient) EditPersonByName(ctx context.Context, in *PersonRequest, opts ...grpc.CallOption) (*PersonResponse, error) {
+	out := new(PersonResponse)
+	err := c.cc.Invoke(ctx, "/protoPerson.PersonService/EditPersonByName", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -294,15 +539,31 @@ func (c *personServiceClient) PrintPerson(ctx context.Context, in *PersonRequest
 
 // PersonServiceServer is the server API for PersonService service.
 type PersonServiceServer interface {
-	PrintPerson(context.Context, *PersonRequest) (*PersonRespond, error)
+	PrintPerson(context.Context, *Empty) (*AllResopons, error)
+	AddPerson(context.Context, *PersonRequest) (*Message, error)
+	DeletePerson(context.Context, *PersonRequest) (*Message, error)
+	EditPersonById(context.Context, *PersonRequest) (*PersonResponse, error)
+	EditPersonByName(context.Context, *PersonRequest) (*PersonResponse, error)
 }
 
 // UnimplementedPersonServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedPersonServiceServer struct {
 }
 
-func (*UnimplementedPersonServiceServer) PrintPerson(context.Context, *PersonRequest) (*PersonRespond, error) {
+func (*UnimplementedPersonServiceServer) PrintPerson(context.Context, *Empty) (*AllResopons, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PrintPerson not implemented")
+}
+func (*UnimplementedPersonServiceServer) AddPerson(context.Context, *PersonRequest) (*Message, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddPerson not implemented")
+}
+func (*UnimplementedPersonServiceServer) DeletePerson(context.Context, *PersonRequest) (*Message, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeletePerson not implemented")
+}
+func (*UnimplementedPersonServiceServer) EditPersonById(context.Context, *PersonRequest) (*PersonResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditPersonById not implemented")
+}
+func (*UnimplementedPersonServiceServer) EditPersonByName(context.Context, *PersonRequest) (*PersonResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditPersonByName not implemented")
 }
 
 func RegisterPersonServiceServer(s *grpc.Server, srv PersonServiceServer) {
@@ -310,7 +571,7 @@ func RegisterPersonServiceServer(s *grpc.Server, srv PersonServiceServer) {
 }
 
 func _PersonService_PrintPerson_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PersonRequest)
+	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -322,7 +583,79 @@ func _PersonService_PrintPerson_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: "/protoPerson.PersonService/PrintPerson",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PersonServiceServer).PrintPerson(ctx, req.(*PersonRequest))
+		return srv.(PersonServiceServer).PrintPerson(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PersonService_AddPerson_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PersonRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PersonServiceServer).AddPerson(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protoPerson.PersonService/AddPerson",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PersonServiceServer).AddPerson(ctx, req.(*PersonRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PersonService_DeletePerson_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PersonRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PersonServiceServer).DeletePerson(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protoPerson.PersonService/DeletePerson",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PersonServiceServer).DeletePerson(ctx, req.(*PersonRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PersonService_EditPersonById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PersonRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PersonServiceServer).EditPersonById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protoPerson.PersonService/EditPersonById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PersonServiceServer).EditPersonById(ctx, req.(*PersonRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PersonService_EditPersonByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PersonRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PersonServiceServer).EditPersonByName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protoPerson.PersonService/EditPersonByName",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PersonServiceServer).EditPersonByName(ctx, req.(*PersonRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -334,6 +667,22 @@ var _PersonService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PrintPerson",
 			Handler:    _PersonService_PrintPerson_Handler,
+		},
+		{
+			MethodName: "AddPerson",
+			Handler:    _PersonService_AddPerson_Handler,
+		},
+		{
+			MethodName: "DeletePerson",
+			Handler:    _PersonService_DeletePerson_Handler,
+		},
+		{
+			MethodName: "EditPersonById",
+			Handler:    _PersonService_EditPersonById_Handler,
+		},
+		{
+			MethodName: "EditPersonByName",
+			Handler:    _PersonService_EditPersonByName_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
