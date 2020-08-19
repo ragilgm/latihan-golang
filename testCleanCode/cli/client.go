@@ -15,6 +15,10 @@ const (
 )
 
 func main() {
+printAllPerson()
+}
+
+func deletePerson(id int64){
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -27,12 +31,55 @@ func main() {
 	c := person.NewPersonServiceClient(conn)
 
 	data := person.PersonRequest{
-		IdUser: 10,
+		IdUser: id,
 	}
 	response, err := c.DeletePerson(ctx, &data)
 	fmt.Println("response from server ",response)
 
 }
+
+func InsertPerson(firstname,lastname string){
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	c := person.NewPersonServiceClient(conn)
+
+	data := person.PersonRequest{
+		FirstName: firstname,
+		LastName: lastname,
+	}
+	response, err := c.AddPerson(ctx, &data)
+	fmt.Println("response from server ",response)
+
+}
+
+func printAllPerson(){
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	c := person.NewPersonServiceClient(conn)
+
+	empty := person.Empty{}
+
+	response, err := c.PrintPerson(ctx, &empty)
+	for _,value := range response.PersonResponse {
+		fmt.Println(value)
+	}
+
+}
+
 //type server struct {
 //	input domain.PersonInputPort
 //}
